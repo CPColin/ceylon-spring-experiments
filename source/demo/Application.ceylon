@@ -19,7 +19,7 @@ import org.springframework.context.annotation {
 springBootApplication
 shared class Application() {
     bean
-    shared default ApplicationRunner runner(UserRepository users)
+    shared ApplicationRunner runner(UserRepository users)
             => object satisfies ApplicationRunner {
         shared actual void run(ApplicationArguments? args) {
             users.save(User("name"));
