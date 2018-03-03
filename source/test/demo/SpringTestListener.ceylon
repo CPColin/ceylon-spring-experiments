@@ -1,6 +1,7 @@
 import ceylon.test {
 	TestDescription,
-	TestListener
+	TestListener,
+	testExtension
 }
 import ceylon.test.event {
 	TestFinishedEvent,
@@ -30,7 +31,9 @@ import org.springframework.test.context {
 abstract class AbstractSpringTestListener() satisfies TestListener {
 	late TestContextManager testContextManager;
 	
-	order => -100;
+	"The documentation for [[TestContextManager]] says to have its functions execute before any other similar before- or
+	 after-test functions run. This arbitrary value might help."
+	shared actual Integer order => -100;
 	
 	shared actual void testRunStarted(TestRunStartedEvent event) {
 		testContextManager = TestContextManager(classForInstance(this));
@@ -58,6 +61,9 @@ abstract class AbstractSpringTestListener() satisfies TestListener {
 		testContextManager.afterTestClass();
 	}
 	
+	"Returns a [[Method]] in the given [[instance]] that matches the function named in the given [[description]],
+	 without caring about the parameter list or return type. The assumption is that there's only gonig to be one, since
+	 we're working with an instance of a Ceylon class."
 	Method? findMethod(Object instance, TestDescription description) {
 		if (exists functionDeclaration = description.functionDeclaration) {
 			value clazz = classForInstance(instance);
@@ -73,5 +79,7 @@ abstract class AbstractSpringTestListener() satisfies TestListener {
 	}
 }
 
+"Spring needs to know whose configuration we want to use while testing, so we extend the abstract listener, annotate it,
+ appropriately, then annotate the package or module with this class as a [[testExtension]]."
 contextConfiguration { classes = [`Application`]; }
 class MySpringTestListener() extends AbstractSpringTestListener() {}
