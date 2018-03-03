@@ -1,3 +1,7 @@
+import ceylon.interop.spring {
+    CeylonRepositoryImpl
+}
+
 import org.springframework.boot.autoconfigure {
     enableAutoConfiguration
 }
@@ -17,6 +21,9 @@ import org.springframework.transaction.annotation {
 configuration
 enableAutoConfiguration
 entityScan { basePackages = ["demo.domain"]; }
-enableJpaRepositories { basePackages = ["demo.repositories"]; }
+enableJpaRepositories {
+    basePackages = ["demo.repositories"];
+    repositoryBaseClass = `class CeylonRepositoryImpl`;
+}
 enableTransactionManagement
 class RepositoryConfiguration() {}
