@@ -62,6 +62,8 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testCount() {
+        productRepository.deleteAll();
+        
         productRepository.save(product);
         
         assertEquals(productRepository.count(), 1);
@@ -69,6 +71,8 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testFindAll() {
+        productRepository.deleteAll();
+        
         value product = this.product;
         
         productRepository.save(product);
