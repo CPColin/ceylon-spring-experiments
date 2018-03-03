@@ -1,4 +1,9 @@
+import ceylon.test {
+    testExtension
+}
+
 native("jvm")
+testExtension(`class MySpringTestListener`)
 module test.demo "1.0.0" {
 	import java.base "8";
 	
