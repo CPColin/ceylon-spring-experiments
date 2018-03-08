@@ -1,17 +1,17 @@
 import org.h2.server.web {
-    WebServlet
+	WebServlet
 }
 import org.springframework.boot.web.servlet {
-    ServletRegistrationBean
+	ServletRegistrationBean
 }
 import org.springframework.context.annotation {
-    bean,
-    configuration
+	bean,
+	configuration
 }
 
 configuration
 class WebConfiguration() {
     bean
-    shared ServletRegistrationBean h2ServletConfiguration()
-            => ServletRegistrationBean(WebServlet(), "/console/*");
+    shared ServletRegistrationBean<WebServlet> h2ServletConfiguration()
+            => ServletRegistrationBean<WebServlet>(WebServlet(), "/console/*");
 }

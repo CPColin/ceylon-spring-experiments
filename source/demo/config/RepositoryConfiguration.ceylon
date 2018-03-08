@@ -1,4 +1,4 @@
-import ceylon.interop.spring {
+import demo.util {
     CeylonRepositoryImpl
 }
 

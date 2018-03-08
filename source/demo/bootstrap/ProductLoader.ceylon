@@ -1,35 +1,32 @@
 import demo.domain {
-    Product
+	Product
 }
 import demo.repositories {
-    ProductRepository
+	ProductRepository
 }
 
 import java.math {
-    BigDecimal
+	BigDecimal
 }
 
-import org.apache.log4j {
-    Logger
-}
 import org.springframework.beans.factory.annotation {
-    autowired
+	autowired
 }
 import org.springframework.context {
-    ApplicationListener
+	ApplicationListener
 }
 import org.springframework.context.event {
-    ContextRefreshedEvent
+	ContextRefreshedEvent
 }
 import org.springframework.stereotype {
-    component
+	component
 }
 
 component
 class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     autowired late ProductRepository productRepository;
     
-    value log = Logger.getLogger(`ProductLoader`);
+    //value log = Logger.getLogger(`ProductLoader`);
     
     shared actual void onApplicationEvent(ContextRefreshedEvent event) {
         value shirt = Product {
@@ -41,7 +38,7 @@ class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
         
         productRepository.save(shirt);
         
-        log.info("Saved Shirt - id: ``shirt.id else "?"``");
+        //log.info("Saved Shirt - id: ``shirt.id else "?"``");
         
         value mug = Product {
             description = "Spring Framework Guru Mug";
@@ -52,6 +49,6 @@ class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
         
         productRepository.save(mug);
         
-        log.info("Saved Mug - id: ``mug.id else "?"``");
+        //log.info("Saved Mug - id: ``mug.id else "?"``");
     }
 }

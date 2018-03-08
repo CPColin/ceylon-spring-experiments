@@ -53,9 +53,7 @@ shared class ProductRepositoryTests() {
         
         assert (exists id);
         
-        value fetchedProduct = productRepository.findOne(id);
-        
-        assert (exists fetchedProduct);
+        value fetchedProduct = productRepository.findById(id).get();
         
         assertProductsEqual(fetchedProduct, product);
     }
