@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><title>Product Details</title></head>
+<!DOCTYPE HTML>
+<html data-th-replace="fragments/Layout.html :: layout (~{::title}, ~{::style} ?: ~{}, ~{::body})">
+<head>
+<title>Product Details</title>
+<script data-th-remove="all" src="Layout.js" defer></script>
+</head>
 <body>
-<ul>
-  <li>ID: <span th:text="${product.id}">id</span></li>
-  <li>Description: <span th:text="${product.description}">description</span></li>
-</ul>
+  <ul>
+    <li>ID: <span data-th-text="${product.id}">id</span></li>
+    <li>Description: <span data-th-text="${product.description}">description</span></li>
+  </ul>
 </body>
 </html>
