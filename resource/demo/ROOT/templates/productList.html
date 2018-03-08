@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html data-th-replace="fragments/Layout.html :: layout (~{::title}, ~{::style} ?: ~{}, ~{::body})">
+<head>
+<title>Product List</title>
+<script data-th-remove="all" src="Layout.js" defer></script>
+</head>
+<body>
+  <table class="table table-striped">
+    <caption>Product List</caption>
+    <tr data-th-each="product : ${products}">
+      <td data-th-text="${product.id}"><a href="productDetails.html" data-th-href="/product/${product.id}">Id</a></td>
+      <td data-th-text="${product.productId}">Product Id</td>
+      <td data-th-text="${product.description}">Description</td>
+      <td data-th-text="${product.price}">Price</td>
+      <td><a href="productDetails.html" data-th-href="${'/product/' + product.id}">View</a></td>
+      <td><a href="productForm.html" data-th-href="${'/product/edit/' + product.id}">Edit</a></td>
+    </tr>
+    <tr data-th-remove="all">
+      <td><a href="/product/0">Id</a></td>
+      <td>Product Id</td>
+      <td>Description</td>
+      <td>Price</td>
+      <td><a href="/product/0">View</a></td>
+      <td><a href="/product/edit/0">Edit</a></td>
+    </tr>
+  </table>
+</body>
+</html>

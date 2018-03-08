@@ -10,7 +10,7 @@ import javax.persistence {
 }
 
 entity
-shared class Product(productId, description, imageUrl, price) {
+shared class Product(productId = "", description = "", imageUrl = "", price = BigDecimal.zero) {
     id
     generatedValue
     shared Integer? id = null;

@@ -1,7 +1,15 @@
 import demo.domain {
-    Product
+	Product
+}
+
+import java.util {
+	JList=List
 }
 
 shared interface ProductService {
-    shared formal Product? getProductById(Integer id);
+	shared formal JList<Product> getAll();
+	
+    shared formal Product? getById(Integer id);
+    
+    shared formal void save(Product product);
 }
