@@ -1,25 +1,25 @@
 import java.math {
-    BigDecimal
+	BigDecimal
 }
 
 import javax.persistence {
-    entity,
-    id,
-    generatedValue,
-    version
+	entity,
+	id,
+	generatedValue,
+	version
 }
 
 entity
-shared class Product(productId = "", description = "", imageUrl = "", price = BigDecimal.zero) {
+shared class Product() {
     id
     generatedValue
-    shared Integer? id = null;
+    shared late Integer id;
     
     version
-    shared Integer? version = null;
+    shared late Integer version;
     
-    shared String productId;
-    shared String description;
-    shared String imageUrl;
-    shared BigDecimal price;
+    shared variable String productId = "";
+    shared variable String description = "";
+    shared variable String imageUrl = "";
+    shared variable BigDecimal price = BigDecimal.zero;
 }

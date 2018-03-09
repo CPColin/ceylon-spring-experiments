@@ -1,7 +1,6 @@
 import ceylon.test {
     assertEquals,
-    assertNull,
-    assertNotNull,
+    assertNotEquals,
     test
 }
 
@@ -27,20 +26,24 @@ transactional
 shared class ProductRepositoryTests() {
     autowired late ProductRepository productRepository;
     
-    value product => Product {
-        description = "Ceylon Bumper Sticker";
-        imageUrl = "";
-        price = BigDecimal.zero;
-        productId = "1234";
-    };
+    value product {
+        value product = Product();
+        
+        product.description = "Ceylon Bumper Sticker";
+        product.imageUrl = "";
+        product.price = BigDecimal.zero;
+        product.productId = "1234";
+
+        return product;
+    }
     
     test
     shared void testIdIsPopulated() {
         value product = this.product;
         
-        assertNull(product.id);
+        assertEquals(product.id, 0);
         productRepository.save(product);
-        assertNotNull(product.id);
+        assertNotEquals(product.id, 0);
     }
     
     test
@@ -49,11 +52,7 @@ shared class ProductRepositoryTests() {
         
         productRepository.save(product);
         
-        value id = product.id;
-        
-        assert (exists id);
-        
-        value fetchedProduct = productRepository.findById(id).get();
+        value fetchedProduct = productRepository.findById(product.id).get();
         
         assertProductsEqual(fetchedProduct, product);
     }

@@ -15,9 +15,9 @@ import org.springframework.ui {
 	Model
 }
 import org.springframework.web.bind.annotation {
+	RequestMethod,
 	pathVariable,
-	requestMapping,
-	RequestMethod
+	requestMapping
 }
 
 controller
@@ -56,6 +56,6 @@ class ProductController() {
     shared String saveProduct(Product product) {
         productService.save(product);
         
-        return "redirect:product/``product.id else 0``";
+        return "redirect:product/``product.id``";
     }
 }
