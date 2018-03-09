@@ -1,12 +1,12 @@
 import java.math {
-	BigDecimal
+    BigDecimal
 }
 
 import javax.persistence {
-	entity,
-	id,
-	generatedValue,
-	version
+    entity,
+    id,
+    generatedValue,
+    version
 }
 
 entity

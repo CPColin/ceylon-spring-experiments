@@ -1,12 +1,12 @@
 import org.h2.server.web {
-	WebServlet
+    WebServlet
 }
 import org.springframework.boot.web.servlet {
-	ServletRegistrationBean
+    ServletRegistrationBean
 }
 import org.springframework.context.annotation {
-	bean,
-	configuration
+    bean,
+    configuration
 }
 
 configuration

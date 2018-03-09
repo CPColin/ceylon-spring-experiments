@@ -1,25 +1,25 @@
 import demo.domain {
-	Product
+    Product
 }
 import demo.repositories {
-	ProductRepository
+    ProductRepository
 }
 
 import java.math {
-	BigDecimal
+    BigDecimal
 }
 
 import org.springframework.beans.factory.annotation {
-	autowired
+    autowired
 }
 import org.springframework.context {
-	ApplicationListener
+    ApplicationListener
 }
 import org.springframework.context.event {
-	ContextRefreshedEvent
+    ContextRefreshedEvent
 }
 import org.springframework.stereotype {
-	component
+    component
 }
 
 component

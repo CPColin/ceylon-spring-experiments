@@ -1,23 +1,23 @@
 import demo.domain {
-	Product
+    Product
 }
 import demo.services {
-	ProductService
+    ProductService
 }
 
 import org.springframework.beans.factory.annotation {
-	autowired
+    autowired
 }
 import org.springframework.stereotype {
-	controller
+    controller
 }
 import org.springframework.ui {
-	Model
+    Model
 }
 import org.springframework.web.bind.annotation {
-	RequestMethod,
-	pathVariable,
-	requestMapping
+    RequestMethod,
+    pathVariable,
+    requestMapping
 }
 
 controller
