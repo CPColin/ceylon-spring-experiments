@@ -21,6 +21,10 @@ class ProductServiceImpl() satisfies ProductService {
     autowired
     late ProductRepository productRepository;
     
+    shared actual void delete(Integer id) {
+        productRepository.deleteById(id);
+    }
+    
     shared actual JList<Product> getAll() => productRepository.findAll();
     
     shared actual Product? getById(Integer id)

@@ -7,6 +7,9 @@ import org.springframework.context.annotation {
 import org.springframework.security.config.annotation.authentication.builders {
     AuthenticationManagerBuilder
 }
+import org.springframework.security.config.annotation.method.configuration {
+    enableGlobalMethodSecurity
+}
 import org.springframework.security.config.annotation.web.builders {
     HttpSecurity
 }
@@ -20,14 +23,15 @@ import org.springframework.security.crypto.password {
 
 configuration
 enableWebSecurity
+enableGlobalMethodSecurity { securedEnabled = true; }
 class SecurityConfiguration() extends WebSecurityConfigurerAdapter() {
     shared actual void configure(HttpSecurity httpSecurity) {
         httpSecurity
             .authorizeRequests()
-                .antMatchers("/webjars/**", "/console/**").permitAll()
+                .antMatchers("/console/**").permitAll()
                 .and()
             .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/products", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()

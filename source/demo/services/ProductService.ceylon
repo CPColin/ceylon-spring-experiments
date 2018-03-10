@@ -7,6 +7,8 @@ import java.util {
 }
 
 shared interface ProductService {
+    shared formal void delete(Integer id);
+    
     shared formal JList<Product> getAll();
     
     shared formal Product? getById(Integer id);

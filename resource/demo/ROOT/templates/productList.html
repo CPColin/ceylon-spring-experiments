@@ -8,12 +8,21 @@
   <table class="table table-striped">
     <caption>Product List</caption>
     <tr data-th-each="product : ${products}">
-      <td data-th-text="${product.id}"><a href="productDetails.html" data-th-href="/product/${product.id}">Id</a></td>
+      <td data-th-text="${product.id}">
+        <a href="productDetails.html" data-th-href="/product/${product.id}">Id</a>
+      </td>
       <td data-th-text="${product.productId}">Product Id</td>
       <td data-th-text="${product.description}">Description</td>
       <td data-th-text="${product.price}">Price</td>
-      <td><a href="productDetails.html" data-th-href="${'/product/' + product.id}">View</a></td>
-      <td><a href="productForm.html" data-th-href="${'/product/edit/' + product.id}">Edit</a></td>
+      <td data-sec-authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">
+        <a href="productDetails.html" data-th-href="${'/product/' + product.id}">View</a>
+      </td>
+      <td data-sec-authorize="hasRole('ROLE_ADMIN')">
+        <a href="productForm.html" data-th-href="${'/product/edit/' + product.id}">Edit</a>
+      </td>
+      <td data-sec-authorize="hasRole('ROLE_ADMIN')">
+        <a href="productDelete.html" data-th-href="${'/product/delete/' + product.id}">Delete</a>
+      </td>
     </tr>
     <tr data-th-remove="all">
       <td><a href="/product/0">Id</a></td>
@@ -22,6 +31,7 @@
       <td>Price</td>
       <td><a href="/product/0">View</a></td>
       <td><a href="/product/edit/0">Edit</a></td>
+      <td><a href="/product/delete/0">Delete</a></td>
     </tr>
   </table>
 </body>
