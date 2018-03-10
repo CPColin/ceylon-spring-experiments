@@ -3,10 +3,14 @@
 source=source
 resource=resource
 
+[compiler.jvm]
+ee=true
+
 [defaults]
 encoding=UTF-8
 flatclasspath=true
 fullyexportmavendependencies=true
+autoexportmavendependencies=true
 
 [formattool]
 profile=default
