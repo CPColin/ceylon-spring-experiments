@@ -2,14 +2,14 @@ import demo.domain {
     Product
 }
 
-import java.util {
-    JList=List
+import java.lang {
+    JIterable=Iterable
 }
 
 shared interface ProductService {
     shared formal void delete(Integer id);
     
-    shared formal JList<Product> getAll();
+    shared formal JIterable<Product> getAll();
     
     shared formal Product? getById(Integer id);
     

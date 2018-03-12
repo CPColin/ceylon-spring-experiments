@@ -5,8 +5,8 @@ import demo.repositories {
     ProductRepository
 }
 
-import java.util {
-    JList=List
+import java.lang {
+    JIterable=Iterable
 }
 
 import org.springframework.beans.factory.annotation {
@@ -25,7 +25,7 @@ class ProductServiceImpl() satisfies ProductService {
         productRepository.deleteById(id);
     }
     
-    shared actual JList<Product> getAll() => productRepository.findAll();
+    shared actual JIterable<Product> getAll() => productRepository.findAll();
     
     shared actual Product? getById(Integer id)
             => let (product = productRepository.findById(id))
