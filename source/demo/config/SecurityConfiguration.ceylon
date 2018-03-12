@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password {
     NoOpPasswordEncoder
 }
 
+"Configures the security settings for our application."
 configuration
 enableWebSecurity
 enableGlobalMethodSecurity { securedEnabled = true; }

@@ -1,9 +1,12 @@
+"An example of combining Ceylon, Spring Boot, and Thymeleaf to make a web application."
 native("jvm")
 module demo "1.0.0" {
     value ceylonVersion = "1.3.3";
     value springBootVersion = "2.0.0.RELEASE";
     
     shared import java.base "8";
+    
+    // This one is for the stuff in the demo.util package only.
     shared import com.redhat.ceylon.common ceylonVersion;
     
     shared import maven:org.springframework.boot:"spring-boot-starter-data-jpa" springBootVersion;

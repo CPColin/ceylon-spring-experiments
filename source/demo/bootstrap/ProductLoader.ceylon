@@ -9,6 +9,9 @@ import java.math {
     BigDecimal
 }
 
+import org.apache.logging.log4j {
+    LogManager
+}
 import org.springframework.beans.factory.annotation {
     autowired
 }
@@ -22,11 +25,12 @@ import org.springframework.stereotype {
     component
 }
 
+"Populates our Product table with a few values, for debugging."
 component
 class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     autowired late ProductRepository productRepository;
     
-    //value log = Logger.getLogger(`ProductLoader`);
+    value log = LogManager.getLogger(`ProductLoader`);
     
     shared actual void onApplicationEvent(ContextRefreshedEvent event) {
         value shirt = Product();
@@ -38,7 +42,7 @@ class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
         
         productRepository.save(shirt);
         
-        //log.info("Saved Shirt - id: ``shirt.id else "?"``");
+        log.info("Saved Shirt - id: ``shirt.id``");
         
         value mug = Product();
         
@@ -49,6 +53,6 @@ class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
         
         productRepository.save(mug);
         
-        //log.info("Saved Mug - id: ``mug.id else "?"``");
+        log.info("Saved Mug - id: ``mug.id``");
     }
 }
