@@ -7,8 +7,8 @@ import ceylon.test {
 import demo.domain {
     User
 }
-import demo.services {
-    UserService
+import demo.services.impl {
+    UserServiceImpl
 }
 
 import org.springframework.beans.factory.annotation {
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation {
 
 transactional
 shared class UserServiceImplTests() {
-    autowired late UserService service;
+    autowired late UserServiceImpl service;
     
     test
     shared void testIdIsPopulatedAfterSave() {
