@@ -1,7 +1,11 @@
+import org.jasypt.util.password {
+    StrongPasswordEncryptor
+}
 import org.springframework.beans.factory.annotation {
     autowired
 }
 import org.springframework.context.annotation {
+    bean,
     configuration
 }
 import org.springframework.security.config.annotation.authentication.builders {
@@ -57,6 +61,10 @@ class SecurityConfiguration() extends WebSecurityConfigurerAdapter() {
                 .and()
                 .withUser("user").password("user").roles("USER");
     }
+    
+    bean
+    shared StrongPasswordEncryptor strongPasswordEncryptor() => StrongPasswordEncryptor();
+    
     //
     //bean
     //shared PasswordEncoder passwordEncoder() => PasswordEncoderFactories.createDelegatingPasswordEncoder();

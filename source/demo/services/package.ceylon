@@ -2,4 +2,4 @@
  satisfy them. Business logic generally lives here and is injected by Spring into other classes.
  The advantages of having separate service and repository layers are increased modularity and the
  ability to mock parts of the flow during testing."
-package demo.services;
+shared package demo.services;
