@@ -23,7 +23,7 @@ shared class User() extends Entity() {
     
     manyToMany { fetch = FetchType.eager; }
     joinTable
-    shared variable JList<Role> roles = ArrayList<Role>();
+    shared variable JList<Authority> authorities = ArrayList<Authority>();
     
     shared variable Integer failedLoginAttempts = 0;
 }
