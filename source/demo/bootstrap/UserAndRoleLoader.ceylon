@@ -57,7 +57,7 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
             value userName = "``userNamePrefix````id``";
             
             user.userName = userName;
-            user.password = userName;
+            userService.setPassword(user, userName);
             
             for (authority in authorities) {
                 user.authorities.add(authority);

@@ -1,15 +1,10 @@
-import org.jasypt.util.password {
-    StrongPasswordEncryptor
+import javax.sql {
+    DataSource
 }
-import org.springframework.beans.factory.annotation {
-    autowired
-}
+
 import org.springframework.context.annotation {
     bean,
     configuration
-}
-import org.springframework.security.config.annotation.authentication.builders {
-    AuthenticationManagerBuilder
 }
 import org.springframework.security.config.annotation.method.configuration {
     enableGlobalMethodSecurity
@@ -21,8 +16,17 @@ import org.springframework.security.config.annotation.web.configuration {
     WebSecurityConfigurerAdapter,
     enableWebSecurity
 }
+import org.springframework.security.core.userdetails {
+    UserDetailsService
+}
+import org.springframework.security.crypto.factory {
+    PasswordEncoderFactories
+}
 import org.springframework.security.crypto.password {
-    NoOpPasswordEncoder
+    PasswordEncoder
+}
+import org.springframework.security.provisioning {
+    JdbcUserDetailsManager
 }
 
 "Configures the security settings for our application."
@@ -47,25 +51,21 @@ class SecurityConfiguration() extends WebSecurityConfigurerAdapter() {
         ;
         
         // Allow the DB Console to work right.
+        // TODO: See if these lines are still needed.
         httpSecurity.csrf().disable();
         httpSecurity.headers().frameOptions().disable();
     }
     
-    suppressWarnings("deprecation")
-    autowired
-    shared void configureGlobal(AuthenticationManagerBuilder auth) {
-        auth
-            .inMemoryAuthentication()
-                .passwordEncoder(NoOpPasswordEncoder.instance)
-                .withUser("admin").password("admin").roles("ADMIN")
-                .and()
-                .withUser("user").password("user").roles("USER");
+    bean
+    shared UserDetailsService jdbcUserDetailsService(DataSource dataSource) {
+        value manager = JdbcUserDetailsManager();
+        
+        manager.dataSource = dataSource;
+        
+        return manager;
     }
     
     bean
-    shared StrongPasswordEncryptor strongPasswordEncryptor() => StrongPasswordEncryptor();
-    
-    //
-    //bean
-    //shared PasswordEncoder passwordEncoder() => PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    shared PasswordEncoder passwordEncoder()
+            => PasswordEncoderFactories.createDelegatingPasswordEncoder();
 }

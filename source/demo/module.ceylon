@@ -2,9 +2,11 @@
 native("jvm")
 module demo "1.0.0" {
     value ceylonVersion = "1.3.3";
+    value javaVersion = "8";
     value springBootVersion = "2.0.0.RELEASE";
     
-    shared import java.base "8";
+    shared import java.base javaVersion;
+    shared import java.jdbc javaVersion;
     
     // This one is for the stuff in the demo.util package only.
     shared import com.redhat.ceylon.common ceylonVersion;
@@ -18,7 +20,6 @@ module demo "1.0.0" {
     import maven:org.thymeleaf.extras:"thymeleaf-extras-springsecurity5" "3.0.3-SNAPSHOT";
     
     import maven:com.h2database:"h2" "1.4.196";
-    import maven:org.jasypt:"jasypt-springsecurity3" "1.9.2";
     
     import maven:org.webjars:"bootstrap" "3.3.7-1";
 }
