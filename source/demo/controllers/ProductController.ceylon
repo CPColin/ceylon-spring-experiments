@@ -28,7 +28,7 @@ class ProductController() {
     autowired late ProductService productService;
     
     requestMapping(["product/delete/{id}"])
-    secured(["ADMIN"])
+    secured(["ROLE_ADMIN"])
     shared String delete(pathVariable Integer id) {
         productService.delete(id);
         
@@ -36,7 +36,7 @@ class ProductController() {
     }
     
     requestMapping(["product/{id}"])
-    secured(["ADMIN", "USER"])
+    secured(["ROLE_ADMIN", "ROLE_USER"])
     shared String details(pathVariable Integer id, Model model) {
         model.addAttribute("product", productService.getById(id));
         
@@ -44,7 +44,7 @@ class ProductController() {
     }
     
     requestMapping(["product/edit/{id}"])
-    secured(["ADMIN"])
+    secured(["ROLE_ADMIN"])
     shared String editProduct(pathVariable Integer id, Model model) {
         model.addAttribute("product", productService.getById(id));
         
@@ -59,7 +59,7 @@ class ProductController() {
     }
     
     requestMapping(["product/new"])
-    secured(["ADMIN"])
+    secured(["ROLE_ADMIN"])
     shared String newProduct(Model model) {
         model.addAttribute("product", Product());
         
@@ -67,7 +67,7 @@ class ProductController() {
     }
     
     requestMapping { \ivalue = ["product"]; method = [RequestMethod.post]; }
-    secured(["ADMIN"])
+    secured(["ROLE_ADMIN"])
     shared String saveProduct(Product product) {
         productService.save(product);
         

@@ -32,8 +32,8 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     value log = LogManager.getLogger(`UserAndRoleLoader`);
     
     shared actual void onApplicationEvent(ContextRefreshedEvent event) {
-        value admin = createAuthority("ADMIN");
-        value user = createAuthority("USER");
+        value admin = createAuthority("ROLE_ADMIN");
+        value user = createAuthority("ROLE_USER");
         
         createUsers("admin", 2, admin, user);
         createUsers("user", 5, user);

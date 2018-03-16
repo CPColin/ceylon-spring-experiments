@@ -14,13 +14,13 @@
       <td data-th-text="${product.productId}">Product Id</td>
       <td data-th-text="${product.description}">Description</td>
       <td data-th-text="${product.price}">Price</td>
-      <td data-sec-authorize="hasAnyAuthority('ADMIN','USER')">
+      <td data-sec-authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">
         <a href="productDetails.html" data-th-href="${'/product/' + product.id}">View</a>
       </td>
-      <td data-sec-authorize="hasAuthority('ADMIN')">
+      <td data-sec-authorize="hasRole('ROLE_ADMIN')">
         <a href="productForm.html" data-th-href="${'/product/edit/' + product.id}">Edit</a>
       </td>
-      <td data-sec-authorize="hasAuthority('ADMIN')">
+      <td data-sec-authorize="hasRole('ROLE_ADMIN')">
         <a href="productDelete.html" data-th-href="${'/product/delete/' + product.id}">Delete</a>
       </td>
     </tr>
