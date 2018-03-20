@@ -51,13 +51,13 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
         return authority;
     }
     
-    void createUsers(String userNamePrefix, Integer count, Authority* authorities) {
+    void createUsers(String usernamePrefix, Integer count, Authority* authorities) {
         for (id in 1..count) {
             value user = User();
-            value userName = "``userNamePrefix````id``";
+            value username = "``usernamePrefix````id``";
             
-            user.userName = userName;
-            userService.setPassword(user, userName);
+            user.username = username;
+            userService.setPassword(user, username);
             
             for (authority in authorities) {
                 user.authorities.add(authority);
@@ -65,7 +65,7 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
             
             userService.save(user);
             
-            log.info("Created user ``userName``");
+            log.info("Created user ``username``");
         }
     }
 }

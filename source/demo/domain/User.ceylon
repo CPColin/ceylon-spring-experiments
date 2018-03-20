@@ -4,36 +4,34 @@ import java.util {
 }
 
 import javax.persistence {
-    FetchType,
     column,
     entity,
-    joinColumn,
-    joinTable,
-    manyToMany,
-    table
+    transient
+}
+
+import org.springframework.security.core.userdetails {
+    UserDetails
 }
 
 entity
-table { name = "Users"; }
-shared class User() extends Entity() {
-    column { name = "Username"; }
-    shared variable String userName = "";
+shared class User() extends Entity() satisfies UserDetails {
+    column { unique = true; }
+    shared actual variable String username = "";
     
-    column { name = "Password"; }
-    shared variable String encryptedPassword = "";
+    shared actual variable String password = "";
     
-    shared variable Boolean enabled = true;
+    shared actual variable Boolean enabled = true;
     
-    // TODO: This is a little tortured, but it works, for now. A custom schema might be cleaner.
-    manyToMany { fetch = FetchType.eager; }
-    joinTable {
-        name = "Authorities";
-        joinColumns = [
-            joinColumn { name = "Username"; referencedColumnName = "Username"; }
-        ];
-        inverseJoinColumns = [
-            joinColumn { name = "Authority"; referencedColumnName = "Authority"; }
-        ];
-    }
-    shared variable JList<Authority> authorities = ArrayList<Authority>();
+    // TODO: many-to-many mapping to Roles, which many-to-many map to Authorities
+    transient
+    shared actual variable JList<Authority> authorities = ArrayList<Authority>();
+    
+    transient
+    shared actual Boolean accountNonExpired = true;
+    
+    transient
+    shared actual Boolean accountNonLocked = true;
+    
+    transient
+    shared actual Boolean credentialsNonExpired = true;
 }

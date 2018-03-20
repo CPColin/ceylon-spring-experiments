@@ -26,8 +26,8 @@ shared class UserServiceImpl() extends CrudServiceImpl<User>() satisfies UserSer
     autowired
     shared late PasswordEncoder passwordEncoder;
     
-    shared actual User? findByUserName(String userName) => repository.findByUserName(userName);
+    shared actual User? findByUsername(String username) => repository.findByUsername(username);
     
     shared actual void setPassword(User user, String plainTextPassword)
-            => user.encryptedPassword = passwordEncoder.encode(plainTextPassword);
+            => user.password = passwordEncoder.encode(plainTextPassword);
 }

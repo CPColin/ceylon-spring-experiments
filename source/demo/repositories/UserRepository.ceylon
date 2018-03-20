@@ -6,5 +6,5 @@ import demo.util {
 }
 
 shared interface UserRepository satisfies CeylonRepository<User, Integer> {
-    shared formal User? findByUserName(String userName);
+    shared formal User? findByUsername(String username);
 }

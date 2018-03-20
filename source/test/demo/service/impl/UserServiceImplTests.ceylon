@@ -26,7 +26,7 @@ shared class UserServiceImplTests() {
     shared void testIdIsPopulatedAfterSave() {
         value user = User();
         
-        user.userName = "test";
+        user.username = "test";
         
         assertEquals(user.id, 0);
         service.save(user);

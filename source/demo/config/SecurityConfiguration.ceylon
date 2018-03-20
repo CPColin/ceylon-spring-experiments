@@ -1,10 +1,17 @@
-import javax.sql {
-    DataSource
+import demo.services.impl {
+    UserServiceImpl
+}
+
+import java.lang {
+    overloaded
 }
 
 import org.springframework.context.annotation {
     bean,
     configuration
+}
+import org.springframework.security.config.annotation.authentication.builders {
+    AuthenticationManagerBuilder
 }
 import org.springframework.security.config.annotation.method.configuration {
     enableGlobalMethodSecurity
@@ -25,15 +32,13 @@ import org.springframework.security.crypto.factory {
 import org.springframework.security.crypto.password {
     PasswordEncoder
 }
-import org.springframework.security.provisioning {
-    JdbcUserDetailsManager
-}
 
 "Configures the security settings for our application."
 configuration
 enableWebSecurity
 enableGlobalMethodSecurity { securedEnabled = true; }
 class SecurityConfiguration() extends WebSecurityConfigurerAdapter() {
+    overloaded
     shared actual void configure(HttpSecurity httpSecurity) {
         httpSecurity
             .authorizeRequests()
@@ -57,15 +62,16 @@ class SecurityConfiguration() extends WebSecurityConfigurerAdapter() {
     }
     
     bean
-    shared UserDetailsService jdbcUserDetailsService(DataSource dataSource) {
-        value manager = JdbcUserDetailsManager();
-        
-        manager.dataSource = dataSource;
-        
-        return manager;
-    }
-    
-    bean
     shared PasswordEncoder passwordEncoder()
             => PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    
+    bean
+    shared actual UserDetailsService userDetailsService() => UserServiceImpl();
+    
+    overloaded
+    shared actual void configure(AuthenticationManagerBuilder auth) {
+        auth
+            .userDetailsService(userDetailsService())
+            .passwordEncoder(passwordEncoder());
+    }
 }
