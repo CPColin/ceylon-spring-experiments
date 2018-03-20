@@ -28,7 +28,8 @@
     </nav>
     
     <div data-sec-authorize="isAuthenticated()" class="welcome">
-      Welcome, <span data-sec-authentication="name"></span>
+      <p>Welcome, <span data-sec-authentication="name">(name)</span></p>
+      <p>You have the following authorities: <span data-sec-authentication="principal.authorities">(authorities)</span></p>
     </div>
     
     <div class="jumbotron">

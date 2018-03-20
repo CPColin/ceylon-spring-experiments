@@ -7,6 +7,7 @@ module demo "1.0.0" {
     
     shared import java.base javaVersion;
     shared import java.jdbc javaVersion;
+    import ceylon.interop.java ceylonVersion;
     
     // This one is for the stuff in the demo.util package only.
     shared import com.redhat.ceylon.common ceylonVersion;

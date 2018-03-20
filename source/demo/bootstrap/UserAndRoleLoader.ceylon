@@ -1,9 +1,15 @@
+import ceylon.interop.java {
+    JavaList
+}
+
 import demo.domain {
     Authority,
+    Role,
     User
 }
 import demo.services {
     AuthorityService,
+    RoleService,
     UserService
 }
 
@@ -27,31 +33,48 @@ component
 class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     autowired late AuthorityService authorityService;
     
+    autowired late RoleService roleService;
+    
     autowired late UserService userService;
     
     value log = LogManager.getLogger(`UserAndRoleLoader`);
     
     shared actual void onApplicationEvent(ContextRefreshedEvent event) {
-        value admin = createAuthority("ROLE_ADMIN");
-        value user = createAuthority("ROLE_USER");
+        value manageProducts = createAuthority("MANAGE_PRODUCTS");
+        value viewProductDetails = createAuthority("VIEW_PRODUCT_DETAILS");
+        value adminRole = createRole("ADMIN", manageProducts);
+        value userRole = createRole("USER", viewProductDetails);
         
-        createUsers("admin", 2, admin, user);
-        createUsers("user", 5, user);
+        createUsers("admin", 2, adminRole, userRole);
+        createUsers("user", 5, userRole);
     }
     
-    Authority createAuthority(String authorityName) {
+    Authority createAuthority(String name) {
         value authority = Authority();
         
-        authority.authority = authorityName;
+        authority.name = name;
         
         authorityService.save(authority);
         
-        log.info("Created authority ``authorityName``");
+        log.info("Created authority ``name``");
         
         return authority;
     }
     
-    void createUsers(String usernamePrefix, Integer count, Authority* authorities) {
+    Role createRole(String name, Authority* authorities) {
+        value role = Role();
+        
+        role.name = name;
+        role.authorities = JavaList(authorities);
+        
+        roleService.save(role);
+        
+        log.info("Created role ``name``");
+        
+        return role;
+    }
+    
+    void createUsers(String usernamePrefix, Integer count, Role* roles) {
         for (id in 1..count) {
             value user = User();
             value username = "``usernamePrefix````id``";
@@ -59,8 +82,8 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
             user.username = username;
             userService.setPassword(user, username);
             
-            for (authority in authorities) {
-                user.authorities.add(authority);
+            for (role in roles) {
+                user.roles.add(role);
             }
             
             userService.save(user);

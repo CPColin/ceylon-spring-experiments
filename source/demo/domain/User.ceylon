@@ -4,11 +4,16 @@ import java.util {
 }
 
 import javax.persistence {
+    FetchType,
     column,
     entity,
+    manyToMany,
     transient
 }
 
+import org.springframework.security.core {
+    GrantedAuthority
+}
 import org.springframework.security.core.userdetails {
     UserDetails
 }
@@ -22,9 +27,11 @@ shared class User() extends Entity() satisfies UserDetails {
     
     shared actual variable Boolean enabled = true;
     
-    // TODO: many-to-many mapping to Roles, which many-to-many map to Authorities
+    manyToMany { fetch = FetchType.eager; }
+    shared variable JList<Role> roles = ArrayList<Role>();
+    
     transient
-    shared actual variable JList<Authority> authorities = ArrayList<Authority>();
+    shared actual variable JList<GrantedAuthority> authorities = ArrayList<GrantedAuthority>();
     
     transient
     shared actual Boolean accountNonExpired = true;

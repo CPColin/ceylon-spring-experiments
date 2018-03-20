@@ -8,5 +8,9 @@ import org.springframework.security.core {
 
 entity
 shared class Authority() extends Entity() satisfies GrantedAuthority {
-    shared actual variable String authority = "";
+    shared variable String name = "";
+    
+    shared actual String authority => name;
+    
+    string => authority;
 }
