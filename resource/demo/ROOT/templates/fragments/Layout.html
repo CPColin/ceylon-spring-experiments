@@ -17,7 +17,7 @@
           <a class="navbar-brand" data-th-href="@{/}" href="index.html">Home</a>
           <ul class="nav navbar-nav">
             <li><a data-th-href="@{/products}" href="productList.html">Products</a></li>
-            <li data-sec-authorize="hasRole('ROLE_ADMIN')"><a data-th-href="@{/product/new}" href="productForm.html">Create Product</a></li>
+            <li data-sec-authorize="hasAuthority('MANAGE_PRODUCTS')"><a data-th-href="@{/product/new}" href="productForm.html">Create Product</a></li>
             <li data-th-switch="${#authorization.expression('isAuthenticated()')}">
               <a data-th-case="false" data-th-href="@{/login}" href="login.html">Sign In</a>
               <!--/*/

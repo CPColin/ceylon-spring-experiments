@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation {
 import org.springframework.security.access.annotation {
     secured
 }
+import org.springframework.security.access.prepost {
+    preAuthorize
+}
 import org.springframework.stereotype {
     controller
 }
@@ -59,7 +62,7 @@ class ProductController() {
     }
     
     requestMapping(["product/new"])
-    secured(["ROLE_ADMIN"])
+    preAuthorize("hasAuthority('MANAGE_PRODUCTS')")
     shared String newProduct(Model model) {
         model.addAttribute("product", Product());
         

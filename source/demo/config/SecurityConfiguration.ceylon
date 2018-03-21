@@ -36,7 +36,7 @@ import org.springframework.security.crypto.password {
 "Configures the security settings for our application."
 configuration
 enableWebSecurity
-enableGlobalMethodSecurity { securedEnabled = true; }
+enableGlobalMethodSecurity { prePostEnabled = true; securedEnabled = true; }
 class SecurityConfiguration() extends WebSecurityConfigurerAdapter() {
     overloaded
     shared actual void configure(HttpSecurity httpSecurity) {
