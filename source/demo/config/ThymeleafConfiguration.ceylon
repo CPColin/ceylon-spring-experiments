@@ -2,7 +2,7 @@ import org.springframework.context.annotation {
     bean,
     configuration
 }
-import org.thymeleaf.extras.springsecurity5.dialect {
+import org.thymeleaf.extras.springsecurity4.dialect {
     SpringSecurityDialect
 }
 

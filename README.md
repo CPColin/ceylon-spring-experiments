@@ -15,12 +15,6 @@ See `.ceylon/config` for important configuration options, notably:
 
 ## Thymeleaf
 
-As of this writing, there's no `thymeleas-extras-springsecurity5` module available, because
-Spring 5 is still pretty new. I made one and put it on my GitHub
-[here](https://github.com/CPColin/thymeleaf-extras-springsecurity). Clone that repository and do a
-`mvn install` in the `thymeleaf-extra-springsecurity5` directory to install the module into your
-local repository.
-
 You can find the Thymeleaf templates in the `resource/demo/ROOT/templates/fragments` directory.
 They use an unusual, inside-out layout pattern I like, where, instead of having to keep the page
 structure consistent between templates, having to remember to include the header and footer
