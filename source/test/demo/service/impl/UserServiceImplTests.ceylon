@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation {
 
 transactional
 shared class UserServiceImplTests() {
-    autowired late UserServiceImpl service;
+    autowired late UserServiceImpl userServiceImpl;
     
     test
     shared void testIdIsPopulatedAfterSave() {
@@ -29,7 +29,7 @@ shared class UserServiceImplTests() {
         user.username = "test";
         
         assertEquals(user.id, 0);
-        service.save(user);
+        userServiceImpl.save(user);
         assertNotEquals(user.id, 0);
     }
 }
