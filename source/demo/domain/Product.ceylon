@@ -3,21 +3,11 @@ import java.math {
 }
 
 import javax.persistence {
-    entity,
-    id,
-    generatedValue,
-    version
+    entity
 }
 
 entity
-shared class Product() {
-    id
-    generatedValue
-    shared late Integer id;
-    
-    version
-    shared late Integer version;
-    
+shared class Product() extends Entity() {
     // These all have to be annotated variable so Spring knows how to update them.
     // Keeping logic out of these classes is probably a good idea, to make up for the mutability.
     
