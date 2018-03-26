@@ -17,7 +17,6 @@ module demo "1.0.0" {
     shared import maven:org.springframework.boot:"spring-boot-starter-security" springBootVersion;
     shared import maven:org.springframework.boot:"spring-boot-starter-web" springBootVersion;
     
-    // Not in Maven Central yet. Grab it off my GitHub and install it locally.
     import maven:org.thymeleaf.extras:"thymeleaf-extras-springsecurity4" "3.0.2.RELEASE";
     
     import maven:com.h2database:"h2" "1.4.196";
