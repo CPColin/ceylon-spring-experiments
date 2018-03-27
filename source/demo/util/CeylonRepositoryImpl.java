@@ -28,59 +28,59 @@ import java.util.Optional;
  */
 @Transactional(readOnly = true)
 @TypeParameters({@TypeParameter(value = "Entity",
-	satisfies = "ceylon.language::Object"),
-@TypeParameter(value = "Id",
-	satisfies = "ceylon.language::Object")})
-@SuppressWarnings("unchecked")
+                                satisfies = "ceylon.language::Object"),
+                 @TypeParameter(value = "Id",
+                                satisfies = "ceylon.language::Object")})
 public class CeylonRepositoryImpl<Entity, Id extends Serializable>
-		extends SimpleJpaRepository<Entity, Id>
-		implements CeylonRepository<Entity, Id> {
-	
-	public CeylonRepositoryImpl(JpaEntityInformation<Entity, ?> entityInformation,
-		EntityManager entityManager) {
-		super(entityInformation, entityManager);
-	}
-	
-	@Override @Ignore @Transactional
-	public void deleteById(@NonNull Id id) {
-		super.deleteById(toJavaId(id));
-	}
-	
-	@Override @Ignore
-	public boolean existsById(@NonNull Id id) {
-		return super.existsById(toJavaId(id));
-	}
-	
-	@Override @Ignore @NonNull
-	public Entity getOne(@NonNull Id id) {
-		return super.getOne(toJavaId(id));
-	}
-	
-	@Override @Ignore @NonNull
-	public Optional<Entity> findById(@NonNull Id id) {
-		return super.findById(toJavaId(id));
-	}
-	
-	@Override @Ignore @NonNull
-	public List<Entity> findAllById(@NonNull Iterable<Id> ids) {
-		List<Id> javaIds = new ArrayList<Id>();
-		for (Id id: ids) {
-			javaIds.add(toJavaId(id));
-		}
-		return super.findAllById(javaIds);
-	}
-	
-	@NonNull private Id toJavaId(@NonNull Id id) {
-		Object javaId;
-		if (id instanceof Integer) {
-			javaId = ((Integer) id).longValue();
-		}
-		else if (id instanceof String) {
-			javaId = id.toString();
-		}
-		else {
-			javaId = id;
-		}
-		return (Id) javaId;
-	}
+        extends SimpleJpaRepository<Entity, Id>
+        implements CeylonRepository<Entity, Id> {
+
+    public CeylonRepositoryImpl(JpaEntityInformation<Entity, ?> entityInformation,
+                                EntityManager entityManager) {
+        super(entityInformation, entityManager);
+    }
+
+    @Override @Ignore @Transactional
+    public void deleteById(@NonNull Id id) {
+        super.deleteById(toJavaId(id));
+    }
+
+    @Override @Ignore
+    public boolean existsById(@NonNull Id id) {
+        return super.existsById(toJavaId(id));
+    }
+
+    @Override @Ignore @NonNull
+    public Entity getOne(@NonNull Id id) {
+        return super.getOne(toJavaId(id));
+    }
+
+    @Override @Ignore @NonNull
+    public Optional<Entity> findById(@NonNull Id id) {
+        return super.findById(toJavaId(id));
+    }
+
+    @Override @Ignore @NonNull
+    public List<Entity> findAllById(@NonNull Iterable<Id> ids) {
+        List<Id> javaIds = new ArrayList<Id>();
+        for (Id id: ids) {
+            javaIds.add(toJavaId(id));
+        }
+        return super.findAllById(javaIds);
+    }
+
+    @SuppressWarnings("unchecked")
+    @NonNull private Id toJavaId(@NonNull Id id) {
+        Object javaId;
+        if (id instanceof Integer) {
+            javaId = ((Integer) id).longValue();
+        }
+        else if (id instanceof String) {
+            javaId = id.toString();
+        }
+        else {
+            javaId = id;
+        }
+        return (Id) javaId;
+    }
 }
