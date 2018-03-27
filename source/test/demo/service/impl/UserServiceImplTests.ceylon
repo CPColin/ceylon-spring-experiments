@@ -24,12 +24,12 @@ shared class UserServiceImplTests() {
     
     test
     shared void testIdIsPopulatedAfterSave() {
-        value user = User();
+        variable value user = User();
         
         user.username = "test";
         
         assertEquals(user.id, 0);
-        userServiceImpl.save(user);
+        user = userServiceImpl.save(user);
         assertNotEquals(user.id, 0);
     }
 }

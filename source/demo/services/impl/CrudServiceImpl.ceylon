@@ -25,5 +25,5 @@ shared abstract class CrudServiceImpl<Type>()
             => let (entity = repository.findById(id))
                 if (entity.present) then entity.get() else null;
     
-    shared actual default void save(Type entity) => repository.save(entity);
+    shared actual default Type save(Type entity) => repository.save(entity);
 }
