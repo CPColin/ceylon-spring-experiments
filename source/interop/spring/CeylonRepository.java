@@ -20,6 +20,9 @@ import java.util.Optional;
  * {@link ceylon.language.String} as an identifier type,
  * in place of Java's {@link java.lang.Long} or
  * {@link java.lang.String}.
+ * 
+ * Additionally, this interface refines {@link JpaRepository} to clarify which
+ * values are not nullable.
  *
  * @param <Entity> the entity type
  * @param <Id> the identifier type

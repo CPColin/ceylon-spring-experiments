@@ -1,3 +1,4 @@
+"A copy of the `ceylon.interop.spring` module, modified to work with Spring 5."
 native("jvm")
 module interop.spring "1.0.0" {
     shared import java.base "8";
