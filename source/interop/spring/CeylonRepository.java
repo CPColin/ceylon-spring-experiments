@@ -22,7 +22,8 @@ import java.util.Optional;
  * {@link java.lang.String}.
  * 
  * Additionally, this interface refines {@link JpaRepository} to clarify which
- * values are not nullable.
+ * values are not nullable; however, calling code can easily accidentally refer
+ * to the superinterface versions.
  *
  * @param <Entity> the entity type
  * @param <Id> the identifier type
