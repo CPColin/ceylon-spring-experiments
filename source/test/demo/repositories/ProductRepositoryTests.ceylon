@@ -72,7 +72,7 @@ shared class ProductRepositoryTests() {
         
         product3.description = "A ``nonTargetWord`` Product";
         
-        return {product1, product2, product3};
+        return JavaIterable {product1, product2, product3};
     }
     
     function example(String word) {
@@ -101,7 +101,7 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testCountExample() {
-        productRepository.saveAll(JavaIterable(products));
+        productRepository.saveAll(products);
         
         assumeTrue(productRepository.count() == 3, "Products did not save properly.");
         
@@ -136,6 +136,24 @@ shared class ProductRepositoryTests() {
     }
     
     test
+    shared void testDeleteAllEntities() {
+        productRepository.saveAll(products);
+        
+        value savedProducts = productRepository.findAll();
+        
+        assumeTrue(savedProducts.size() > 1, "Need to have more than one test product.");
+        
+        value first = savedProducts.remove(0);
+        
+        productRepository.deleteAll(savedProducts);
+        
+        value remainingProducts = productRepository.findAll();
+        
+        assertEquals(remainingProducts.size(), 1, "One product should be left.");
+        assertProductsEqual(remainingProducts.get(0), first, "Unexpected product remained.");
+    }
+    
+    test
     shared void testDeleteById() {
         value savedProduct = productRepository.save(product);
         value id = savedProduct.id;
@@ -161,7 +179,7 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testExistsExample() {
-        productRepository.saveAll(JavaIterable(products));
+        productRepository.saveAll(products);
         
         assumeTrue(productRepository.count() == 3, "Products did not save properly.");
         
@@ -180,6 +198,24 @@ shared class ProductRepositoryTests() {
     }
     
     test
+    shared void testFindAllById() {
+        value savedProduct1 = productRepository.save(product);
+        value id1 = savedProduct1.id;
+        value savedProduct2 = productRepository.save(product);
+        value id2 = savedProduct2.id;
+        
+        assert (exists id1, exists id2);
+        
+        assumeFalse(id1 == id2, "Saved ID's should differ.");
+        assumeTrue(productRepository.count() == 2, "There should be two entities in the repository.");
+        
+        value products = productRepository.findAllById(JavaIterable {id2});
+        
+        assertEquals(products.size(), 1, "Only one product should have been returned.");
+        assertProductsEqual(products.get(0), savedProduct2, "Fetched product did not match saved product.");
+    }
+    
+    test
     shared void testFindById() {
         value savedProduct = productRepository.save(product);
         value id = savedProduct.id;
@@ -189,6 +225,13 @@ shared class ProductRepositoryTests() {
         value fetchedProduct = productRepository.findById(id).get();
         
         assertProductsEqual(fetchedProduct, savedProduct, "Fetched product did not match saved product.");
+    }
+    
+    test
+    shared void testFindByIdMissing() {
+        value fetchedProduct = productRepository.findById(-1);
+        
+        assertFalse(fetchedProduct.present);
     }
     
     test
@@ -261,7 +304,6 @@ shared class ProductRepositoryTests() {
 
 /* TODO
  
-    void deleteAll(@NonNull Iterable<? extends Entity> entities);
     void deleteAllInBatch();
     void deleteInBatch(@NonNull Iterable<Entity> entities);
     <ConcreteEntity extends Entity> List<ConcreteEntity> findAll(@NonNull Example<ConcreteEntity> example);
@@ -269,7 +311,6 @@ shared class ProductRepositoryTests() {
     <ConcreteEntity extends Entity> List<ConcreteEntity> findAll(@NonNull Example<ConcreteEntity> example, @NonNull Sort sort);
     Page<Entity> findAll(@NonNull Pageable pageable);
     List<Entity> findAll(@NonNull Sort sort);
-    List<Entity> findAllById(@NonNull Iterable<Id> ids);
     <ConcreteEntity extends Entity> Optional<ConcreteEntity> findOne(@NonNull Example<ConcreteEntity> example);
     <ConcreteEntity extends Entity> List<ConcreteEntity> saveAll(@NonNull Iterable<ConcreteEntity> entities);
     <ConcreteEntity extends Entity> ConcreteEntity saveAndFlush(@NonNull ConcreteEntity entity);
