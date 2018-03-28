@@ -14,5 +14,6 @@ shared interface CrudService<Type>
     
     shared formal Type? getById(Integer id);
     
-    shared formal void save(Type entity);
+    // FIXME: This should return Type, but doing so makes Spring think CrudServiceImpl.save() doesn't match.
+    shared formal Entity save(Type entity);
 }

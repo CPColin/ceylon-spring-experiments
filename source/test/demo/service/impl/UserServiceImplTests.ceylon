@@ -1,6 +1,6 @@
 import ceylon.test {
-    assertEquals,
-    assertNotEquals,
+    assertFalse,
+    assertTrue,
     test
 }
 
@@ -28,8 +28,8 @@ shared class UserServiceImplTests() {
         
         user.username = "test";
         
-        assertEquals(user.id, 0);
+        assertFalse(user.id exists);
         user = userServiceImpl.save(user);
-        assertNotEquals(user.id, 0);
+        assertTrue(user.id exists);
     }
 }

@@ -64,7 +64,12 @@ class ProductController() {
     requestMapping(["product/new"])
     preAuthorize("hasAuthority('MANAGE_PRODUCTS')")
     shared String newProduct(Model model) {
-        model.addAttribute("product", Product());
+        value product = Product();
+        
+        product.id = 0;
+        product.version = 0;
+        
+        model.addAttribute("product", product);
         
         return "productForm";
     }
@@ -72,8 +77,8 @@ class ProductController() {
     requestMapping { \ivalue = ["product"]; method = [RequestMethod.post]; }
     secured(["ROLE_ADMIN"])
     shared String saveProduct(Product product) {
-        productService.save(product);
+        value savedProduct = productService.save(product);
         
-        return "redirect:product/``product.id``";
+        return "redirect:product/``savedProduct.id else 0``";
     }
 }

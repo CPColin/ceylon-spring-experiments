@@ -8,7 +8,8 @@ import demo.domain {
     Entity
 }
 
-[[Integer, Boolean]*] savedParameters = [
+[[Integer?, Boolean]*] savedParameters = [
+    [null, false],
     [0, false],
     [1, true],
     [2, true]
@@ -17,7 +18,7 @@ import demo.domain {
 shared class EntityTests() {
     test
     parameters(`value savedParameters`)
-    shared void testSaved(Integer id, Boolean expected) {
+    shared void testSaved(Integer? id, Boolean expected) {
         object entity extends Entity() {}
         
         entity.id = id;

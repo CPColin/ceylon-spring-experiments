@@ -42,7 +42,7 @@ class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
         
         productRepository.save(shirt);
         
-        log.info("Saved Shirt - id: ``shirt.id``");
+        log.info("Saved Shirt - id: ``shirt.id else 0``");
         
         value mug = Product();
         
@@ -53,6 +53,6 @@ class ProductLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
         
         productRepository.save(mug);
         
-        log.info("Saved Mug - id: ``mug.id``");
+        log.info("Saved Mug - id: ``mug.id else 0``");
     }
 }
