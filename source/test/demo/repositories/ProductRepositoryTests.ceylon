@@ -1,4 +1,5 @@
 import ceylon.interop.java {
+    CeylonIterable,
     JavaIterable
 }
 import ceylon.test {
@@ -31,20 +32,30 @@ import javax.persistence {
 import org.springframework.beans.factory.annotation {
     autowired
 }
+import org.springframework.dao {
+    IncorrectResultSizeDataAccessException
+}
 import org.springframework.data.domain {
     Example,
     ExampleMatcher {
         StringMatcher
+    },
+    PageRequest,
+    Sort {
+        Direction
     }
 }
 import org.springframework.transaction.annotation {
     transactional
 }
 
+"Verifies that our Spring integration in [[interop.spring::CeylonRepository]] and
+ [[interop.spring::CeylonRepositoryImpl]] is working properly, via [[ProductRepository]]."
 transactional
 shared class ProductRepositoryTests() {
     autowired late ProductRepository productRepository;
     
+    "A single entity that can be used for testing single-value operations."
     value product {
         value product = Product();
         
@@ -59,6 +70,7 @@ shared class ProductRepositoryTests() {
     value targetWord = "Good";
     value nonTargetWord = "Bad";
     
+    "A trio of entities that can be used for testing multi-value operations."
     value products {
         value product1 = Product();
         
@@ -72,7 +84,7 @@ shared class ProductRepositoryTests() {
         
         product3.description = "A ``nonTargetWord`` Product";
         
-        return JavaIterable {product1, product2, product3};
+        return {product1, product2, product3};
     }
     
     function example(String word) {
@@ -87,6 +99,7 @@ shared class ProductRepositoryTests() {
     
     beforeTest
     shared void setup() {
+        // Start the repository off clean, free of any bootstrapped values.
         productRepository.deleteAll();
     }
     
@@ -101,7 +114,7 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testCountExample() {
-        productRepository.saveAll(products);
+        productRepository.saveAll(JavaIterable(products));
         
         assumeTrue(productRepository.count() == 3, "Products did not save properly.");
         
@@ -126,18 +139,18 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testDeleteAll() {
-        productRepository.save(product);
+        productRepository.saveAll(JavaIterable(products));
         
-        assertEquals(productRepository.count(), 1);
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
         
         productRepository.deleteAll();
         
-        assertEquals(productRepository.count(), 0);
+        assertEquals(productRepository.count(), 0, "No entities should remain in the repository.");
     }
     
     test
     shared void testDeleteAllEntities() {
-        productRepository.saveAll(products);
+        productRepository.saveAll(JavaIterable(products));
         
         value savedProducts = productRepository.findAll();
         
@@ -151,6 +164,17 @@ shared class ProductRepositoryTests() {
         
         assertEquals(remainingProducts.size(), 1, "One product should be left.");
         assertProductsEqual(remainingProducts.get(0), first, "Unexpected product remained.");
+    }
+    
+    test
+    shared void testDeleteAllInBatch() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        
+        productRepository.deleteAllInBatch();
+        
+        assertEquals(productRepository.count(), 0, "No entities should remain in the repository.");
     }
     
     test
@@ -168,6 +192,24 @@ shared class ProductRepositoryTests() {
     }
     
     test
+    shared void testDeleteInBatch() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        value savedProducts = productRepository.findAll();
+        
+        assumeTrue(savedProducts.size() > 1, "Need to have more than one test product.");
+        
+        value first = savedProducts.remove(0);
+        
+        productRepository.deleteInBatch(savedProducts);
+        
+        value remainingProducts = productRepository.findAll();
+        
+        assertEquals(remainingProducts.size(), 1, "One product should be left.");
+        assertProductsEqual(remainingProducts.get(0), first, "Unexpected product remained.");
+    }
+    
+    test
     shared void testExistsById() {
         value id = productRepository.save(product).id;
         
@@ -179,7 +221,7 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testExistsExample() {
-        productRepository.saveAll(products);
+        productRepository.saveAll(JavaIterable(products));
         
         assumeTrue(productRepository.count() == 3, "Products did not save properly.");
         
@@ -216,6 +258,123 @@ shared class ProductRepositoryTests() {
     }
     
     test
+    shared void testFindAllExample() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        
+        value example = this.example(targetWord);
+        value fetchedProducts = productRepository.findAll(example);
+        
+        assertEquals(fetchedProducts.size(), 2, "Exactly two entities should match the example.");
+        assertTrue(CeylonIterable(fetchedProducts).every((product) => product.description.contains(targetWord)),
+            "One or more returned entities is missing the target word.");
+    }
+    
+    test
+    shared void testFindAllExamplePage() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        value expectedProductDescriptions = products
+                .map((product) => product.description)
+                .sort(byIncreasing(identity<String>))
+                .sequence();
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        assumeTrue(expectedProductDescriptions.size == 2, "Expected two descriptions.");
+        
+        // The latter one
+        value expectedProductDescription = expectedProductDescriptions[1];
+        
+        assert (exists expectedProductDescription);
+        
+        value example = this.example(targetWord);
+        value sort = Sort(Direction.asc, "description");
+        // The latter one
+        value pageRequest = PageRequest.\iof(1, 1, sort);
+        
+        value fetchedProducts = productRepository.findAll(example, pageRequest);
+        
+        assertEquals(fetchedProducts.totalElements, 2, "Unexpected total size.");
+        assertEquals(fetchedProducts.size, 1, "Unexpected page size.");
+        assertEquals(fetchedProducts.content.get(0).description, expectedProductDescription, "Unexpected element.");
+    }
+    
+    test
+    shared void testFindAllExampleSort() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        value expectedProductDescriptions = products
+                .map((product) => product.description)
+                .filter((description) => description.contains(targetWord))
+                .sort(byIncreasing(identity<String>))
+                .sequence();
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        assumeTrue(expectedProductDescriptions.size == 2, "Expected two descriptions.");
+        
+        value example = this.example(targetWord);
+        value sort = Sort(Direction.asc, "description");
+        
+        value fetchedProductDescriptions = CeylonIterable(productRepository.findAll(example, sort))
+                .map((product) => product.description)
+                .sequence();
+        
+        assertEquals(fetchedProductDescriptions, expectedProductDescriptions,
+            "Fetched descriptions did not matched saved descriptions.");
+    }
+
+    test
+    shared void testFindAllPage() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        value savedProductDescriptions = products
+                .map((product) => product.description)
+                .sort(byIncreasing(identity<String>))
+                .sequence();
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        assumeTrue(savedProductDescriptions.size == 3, "Expected three entities.");
+        
+        // The middle one!
+        value expectedProductDescription = savedProductDescriptions[1];
+        
+        assert (exists expectedProductDescription);
+        
+        value sort = Sort(Direction.asc, "description");
+        // The middle one!
+        value pageRequest = PageRequest.\iof(1, 1, sort);
+        
+        value fetchedProducts = productRepository.findAll(pageRequest);
+        
+        assertEquals(fetchedProducts.totalElements, 3, "Unexpected total size.");
+        assertEquals(fetchedProducts.size, 1, "Unexpected page size.");
+        assertEquals(fetchedProducts.content.get(0).description, expectedProductDescription, "Unexpected element.");
+    }
+    
+    test
+    shared void testFindAllSort() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        value savedProductDescriptions = products
+                .map((product) => product.description)
+                .sort(byIncreasing(identity<String>))
+                .sequence();
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        assumeTrue(savedProductDescriptions.size == 3, "Expected three descriptions.");
+        
+        value sort = Sort(Direction.asc, "description");
+        
+        value fetchedProductDescriptions = CeylonIterable(productRepository.findAll(sort))
+                .map((product) => product.description)
+                .sequence();
+        
+        assertEquals(fetchedProductDescriptions, savedProductDescriptions,
+            "Fetched descriptions did not matched saved descriptions.");
+    }
+    
+    test
     shared void testFindById() {
         value savedProduct = productRepository.save(product);
         value id = savedProduct.id;
@@ -232,6 +391,34 @@ shared class ProductRepositoryTests() {
         value fetchedProduct = productRepository.findById(-1);
         
         assertFalse(fetchedProduct.present);
+    }
+    
+    test
+    shared void testFindOne() {
+        productRepository.saveAll(JavaIterable(products));
+        
+        value expectedProduct = CeylonIterable(productRepository.findAll())
+                .find((product) => product.description.contains(nonTargetWord));
+        
+        assert (exists expectedProduct);
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        
+        value fetchedProduct = productRepository.findOne(this.example(nonTargetWord)).get();
+        
+        assertProductsEqual(fetchedProduct, expectedProduct, "Fetched product did not match expected product.");
+    }
+    
+    test
+    shared void testFindOneMatchesMultiple() {
+        assumeTrue(products.count((product) => product.description.contains(targetWord)) > 1);
+        
+        productRepository.saveAll(JavaIterable(products));
+        
+        assumeTrue(productRepository.count() == 3, "Products did not save properly.");
+        
+        assertThatException(() => productRepository.findOne(this.example(targetWord)).get())
+                .hasType(`IncorrectResultSizeDataAccessException`);
     }
     
     test
@@ -274,6 +461,42 @@ shared class ProductRepositoryTests() {
     }
     
     test
+    shared void testSaveAll() {
+        value savedProductDescriptions = products
+                .map((product) => product.description)
+                .sort(byIncreasing(identity<String>))
+                .sequence();
+        
+        productRepository.saveAll(JavaIterable(products));
+        
+        value fetchedProductDescriptions = CeylonIterable(productRepository.findAll())
+                .map((product) => product.description)
+                .sort(byIncreasing(identity<String>))
+                .sequence();
+        
+        assertEquals(fetchedProductDescriptions, savedProductDescriptions,
+            "Fetched entities didn't match saved entities.");
+    }
+    
+    test
+    shared void testSaveAndFlushPopulatesId() {
+        assumeFalse(product.id exists, "Product ID should start off null.");
+        
+        value savedProduct = productRepository.saveAndFlush(product);
+        
+        assertTrue(savedProduct.id exists, "Product ID should no longer be null.");
+    }
+    
+    test
+    shared void testSaveAndFlushPopulatesSaved() {
+        assumeFalse(product.saved, "Product ID should start off null.");
+        
+        value savedProduct = productRepository.saveAndFlush(product);
+        
+        assertTrue(savedProduct.saved, "Product ID should no longer be null.");
+    }
+    
+    test
     shared void testSavePopulatesId() {
         assumeFalse(product.id exists, "Product ID should start off null.");
         
@@ -301,18 +524,3 @@ shared class ProductRepositoryTests() {
         ], message);
     }
 }
-
-/* TODO
- 
-    void deleteAllInBatch();
-    void deleteInBatch(@NonNull Iterable<Entity> entities);
-    <ConcreteEntity extends Entity> List<ConcreteEntity> findAll(@NonNull Example<ConcreteEntity> example);
-    <ConcreteEntity extends Entity> Page<ConcreteEntity> findAll(@NonNull Example<ConcreteEntity> example, @NonNull Pageable pageable);
-    <ConcreteEntity extends Entity> List<ConcreteEntity> findAll(@NonNull Example<ConcreteEntity> example, @NonNull Sort sort);
-    Page<Entity> findAll(@NonNull Pageable pageable);
-    List<Entity> findAll(@NonNull Sort sort);
-    <ConcreteEntity extends Entity> Optional<ConcreteEntity> findOne(@NonNull Example<ConcreteEntity> example);
-    <ConcreteEntity extends Entity> List<ConcreteEntity> saveAll(@NonNull Iterable<ConcreteEntity> entities);
-    <ConcreteEntity extends Entity> ConcreteEntity saveAndFlush(@NonNull ConcreteEntity entity);
-
- */
