@@ -24,6 +24,9 @@ shared abstract class Entity() {
     
     shared variable Date? lastUpdated = null;
     
+    "Indicates `true` if this entity has ever been saved to the database; that is, when its ID is not zero."
+    shared Boolean saved => id != 0;
+    
     preUpdate
     prePersist
     shared void updateTimeStamps() {
