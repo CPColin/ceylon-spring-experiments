@@ -1,8 +1,9 @@
-package demo.util;
+package interop.spring;
 
 import ceylon.language.Integer;
 import ceylon.language.String;
 import com.redhat.ceylon.common.NonNull;
+import com.redhat.ceylon.common.Nullable;
 import com.redhat.ceylon.compiler.java.metadata.Ignore;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameter;
 import com.redhat.ceylon.compiler.java.metadata.TypeParameters;
@@ -31,6 +32,7 @@ import java.util.Optional;
                                 satisfies = "ceylon.language::Object"),
                  @TypeParameter(value = "Id",
                                 satisfies = "ceylon.language::Object")})
+@SuppressWarnings("unchecked")
 public class CeylonRepositoryImpl<Entity, Id extends Serializable>
         extends SimpleJpaRepository<Entity, Id>
         implements CeylonRepository<Entity, Id> {
@@ -55,7 +57,7 @@ public class CeylonRepositoryImpl<Entity, Id extends Serializable>
         return super.getOne(toJavaId(id));
     }
 
-    @Override @Ignore @NonNull
+    @Override @Ignore @Nullable
     public Optional<Entity> findById(@NonNull Id id) {
         return super.findById(toJavaId(id));
     }
@@ -69,7 +71,6 @@ public class CeylonRepositoryImpl<Entity, Id extends Serializable>
         return super.findAllById(javaIds);
     }
 
-    @SuppressWarnings("unchecked")
     @NonNull private Id toJavaId(@NonNull Id id) {
         Object javaId;
         if (id instanceof Integer) {

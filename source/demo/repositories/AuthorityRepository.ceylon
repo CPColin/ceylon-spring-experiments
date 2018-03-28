@@ -1,7 +1,8 @@
 import demo.domain {
     Authority
 }
-import demo.util {
+
+import interop.spring {
     CeylonRepository
 }
 

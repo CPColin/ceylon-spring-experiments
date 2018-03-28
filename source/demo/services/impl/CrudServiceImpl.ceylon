@@ -4,7 +4,7 @@ import demo.domain {
 import demo.services {
     CrudService
 }
-import demo.util {
+import interop.spring {
     CeylonRepository
 }
 

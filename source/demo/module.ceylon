@@ -9,8 +9,8 @@ module demo "1.0.0" {
     shared import java.jdbc javaVersion;
     import ceylon.interop.java ceylonVersion;
     
-    // This one is for the stuff in the demo.util package only.
-    shared import com.redhat.ceylon.common ceylonVersion;
+    // Repository utility code
+    shared import interop.spring "1.0.0";
     
     shared import maven:org.springframework.boot:"spring-boot-starter-data-jpa" springBootVersion;
     shared import maven:org.springframework.boot:"spring-boot-starter-thymeleaf" springBootVersion;

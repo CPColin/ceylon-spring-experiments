@@ -1,7 +1,8 @@
 import demo.domain {
     User
 }
-import demo.util {
+
+import interop.spring {
     CeylonRepository
 }
 
