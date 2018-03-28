@@ -3,9 +3,11 @@ import ceylon.test {
     TestListener
 }
 import ceylon.test.event {
+    TestAbortedEvent,
     TestFinishedEvent,
     TestRunFinishedEvent,
     TestRunStartedEvent,
+    TestSkippedEvent,
     TestStartedEvent
 }
 
@@ -27,6 +29,9 @@ import org.springframework.test.context {
 abstract class AbstractSpringTestListener() satisfies TestListener {
     late TestContextManager testContextManager;
     
+    variable Object? instance = null;
+    variable Method? method = null;
+    
     "The documentation for [[TestContextManager]] says to have its functions execute before any
      other similar before- or after-test functions run. This arbitrary value might help."
     shared actual Integer order => -100;
@@ -38,18 +43,42 @@ abstract class AbstractSpringTestListener() satisfies TestListener {
     
     shared actual void testStarted(TestStartedEvent event) {
         if (exists instance = event.instance) {
+            this.instance = instance;
+            
             testContextManager.prepareTestInstance(instance);
             
             if (exists method = findMethod(instance, event.description)) {
+                this.method = method;
+                
                 testContextManager.beforeTestMethod(instance, method);
             }
         }
     }
     
     shared actual void testFinished(TestFinishedEvent event) {
-        if (exists instance = event.instance,
-            exists method = findMethod(instance, event.result.description)) {
+        if (exists instance = this.instance, exists method = this.method) {
             testContextManager.afterTestMethod(instance, method, event.result.exception);
+        }
+        
+        this.instance = null;
+        this.method = null;
+    }
+    
+    shared actual void testAborted(TestAbortedEvent event) {
+        if (exists instance = this.instance, exists method = this.method) {
+            testContextManager.afterTestMethod(instance, method, event.result.exception);
+            
+            this.instance = null;
+            this.method = null;
+        }
+    }
+    
+    shared actual void testSkipped(TestSkippedEvent event) {
+        if (exists instance = this.instance, exists method = this.method) {
+            testContextManager.afterTestMethod(instance, method, event.result.exception);
+            
+            this.instance = null;
+            this.method = null;
         }
     }
     
