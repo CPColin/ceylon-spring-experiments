@@ -2,6 +2,10 @@
 
 Let's smush Ceylon, Spring Boot, and Thymeleaf together and see what happens!
 
+Run the `demo::run` function to fire up a server on `localhost:8080` and experiment with the simple
+CRUD webapp. Log in as `admin1` or `admin2` to get elevated privileges or anybody between `user1`
+and `user5` to get normal privileges.
+
 ## Important configuration options
 
 See `.ceylon/config` for important configuration options, notably:
