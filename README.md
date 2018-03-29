@@ -6,6 +6,14 @@ Run the `demo::run` function to fire up a server on `localhost:8080` and experim
 CRUD webapp. Log in as `admin1` or `admin2` to get elevated privileges or anybody between `user1`
 and `user5` to get normal privileges.
 
+## Fun stuff
+
+   - Look how clean `demo.domain::Product` is! Since Ceylon takes care of the getters and setters
+     for us, we can just annotate our attributes `variable` and we're good to go.
+   - By annotating `demo.services.impl::CrudServiceImpl.repository` with `formal`, we enforce the
+     contract that each class in `demo.services.impl` must specify which repository interface it's
+     going to use while also being able to provide default implementations of some common tasks.
+
 ## Important configuration options
 
 See `.ceylon/config` for important configuration options, notably:
