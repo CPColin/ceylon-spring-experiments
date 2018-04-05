@@ -12,6 +12,7 @@ shared class Product() extends Entity() {
     // Keeping logic out of these classes is probably a good idea, to make up for the mutability.
     
     shared variable String productId = "";
+    shared variable ProductType productType = ProductType.unknown;
     shared variable String description = "";
     shared variable String imageUrl = "";
     shared variable BigDecimal price = BigDecimal.zero;

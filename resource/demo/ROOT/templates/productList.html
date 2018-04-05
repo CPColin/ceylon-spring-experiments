@@ -7,11 +7,22 @@
 <body>
   <table class="table table-striped">
     <caption>Product List</caption>
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th data-sec-authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')"></th>
+      <th data-sec-authorize="hasRole('ROLE_ADMIN')"></th>
+      <th data-sec-authorize="hasRole('ROLE_ADMIN')"></th>
+    </tr>
     <tr data-th-each="product : ${products}">
       <td data-th-text="${product.id}">
         <a href="productDetails.html" data-th-href="/product/${product.id}">Id</a>
       </td>
       <td data-th-text="${product.productId}">Product Id</td>
+      <td data-th-text="${product.productType}">Product Type</td>
       <td data-th-text="${product.description}">Description</td>
       <td data-th-text="${product.price}">Price</td>
       <td data-sec-authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">
@@ -27,6 +38,7 @@
     <tr data-th-remove="all">
       <td><a href="/product/0">Id</a></td>
       <td>Product Id</td>
+      <td>Product Type</td>
       <td>Description</td>
       <td>Price</td>
       <td><a href="/product/0">View</a></td>
