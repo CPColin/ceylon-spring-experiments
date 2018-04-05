@@ -1,11 +1,16 @@
+import ceylon.interop.java {
+    JavaIterable
+}
 import ceylon.language.meta {
     classDeclaration
 }
 import ceylon.language.meta.model {
-    ClassOrInterface
+    ClassOrInterface,
+    Type
 }
 
 import java.lang {
+    JIterable=Iterable,
     JLong=Long,
     JString=String,
     Types {
@@ -31,12 +36,19 @@ shared abstract class EnumeratedStringColumn(String databaseValue)
 "Returns the [[EntityType]] value that matches the given [[attribute]], if any."
 EntityType? findEntityValue<EntityType, DatabaseType>(DatabaseType attribute)
         given EntityType satisfies EnumeratedColumn<DatabaseType>
-        given DatabaseType satisfies Object {
-    value entityType = `EntityType`;
-    
+        given DatabaseType satisfies Object
+        => cvalues(`EntityType`).find((entity) => entity.databaseValue == attribute);
+
+"Returns all the values for the given [[entityType]] in a Ceylon [[Iterable]]."
+shared {EntityType*} cvalues<EntityType>(Type<EntityType> entityType) {
     assert (is ClassOrInterface<EntityType> entityType);
     
-    return entityType.caseValues.find((entity) => entity.databaseValue == attribute);
+    return entityType.caseValues;
+}
+
+"Returns all the values for the given [[entityType]] in a Java [[JIterable]]."
+shared JIterable<EntityType> jvalues<EntityType>(Type<EntityType> entityType) {
+    return JavaIterable(cvalues(entityType));
 }
 
 "A converter between [[EntityType]]s that use [[Integer]]s and database tables that use [[JLong]]s."

@@ -1,5 +1,12 @@
 import interop.spring {
-    ...
+    EnumeratedStringColumn,
+    EnumeratedStringColumnConverter,
+    cv=cvalues,
+    jv=jvalues
+}
+
+import java.lang {
+    JIterable=Iterable
 }
 
 import javax.persistence {
@@ -26,6 +33,10 @@ shared class ProductType
         extends EnumeratedStringColumn {
     converter { autoApply = true; }
     shared static class Converter() extends EnumeratedStringColumnConverter<ProductType>() {}
+    
+    shared static {ProductType*} cvalues => cv(`ProductType`);
+    
+    shared static JIterable<ProductType> jvalues => jv(`ProductType`);
     
     shared new unknown extends EnumeratedStringColumn("Unknown") {}
     
