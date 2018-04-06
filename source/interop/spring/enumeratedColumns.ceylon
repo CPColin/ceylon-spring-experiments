@@ -17,9 +17,16 @@ import java.lang {
         nativeString
     }
 }
+import java.util {
+    Locale
+}
 
 import javax.persistence {
     AttributeConverter
+}
+
+import org.springframework.format {
+    Formatter
 }
 
 shared abstract class EnumeratedColumn<DatabaseType>(shared DatabaseType databaseValue)
@@ -53,22 +60,36 @@ shared JIterable<EntityType> jvalues<EntityType>(Type<EntityType> entityType) {
 
 "A converter between [[EntityType]]s that use [[Integer]]s and database tables that use [[JLong]]s."
 shared abstract class EnumeratedIntegerColumnConverter<EntityType>()
-        satisfies AttributeConverter<EntityType, JLong>
+        satisfies AttributeConverter<EntityType, JLong> & Formatter<EntityType>
         given EntityType satisfies EnumeratedIntegerColumn {
     shared actual JLong? convertToDatabaseColumn(EntityType? attribute)
             => if (exists attribute) then JLong(attribute.databaseValue) else null;
     
     shared actual EntityType? convertToEntityAttribute(JLong? attribute)
             => if (exists attribute) then findEntityValue<EntityType, Integer>(attribute.longValue()) else null;
+    
+    shared actual EntityType? parse(String? text, Locale locale)
+            => if (exists text, is Integer longValue = Integer.parse(text))
+                then convertToEntityAttribute(JLong(longValue))
+                else null;
+    
+    shared actual String? print(EntityType? entity, Locale locale)
+            => convertToDatabaseColumn(entity)?.string;
 }
 
 "A converter between [[EntityType]]s that use [[String]]s and database tables that use [[JString]]s."
 shared abstract class EnumeratedStringColumnConverter<EntityType>()
-        satisfies AttributeConverter<EntityType, JString>
+        satisfies AttributeConverter<EntityType, JString> & Formatter<EntityType>
         given EntityType satisfies EnumeratedStringColumn {
     shared actual JString? convertToDatabaseColumn(EntityType? attribute)
             => if (exists attribute) then nativeString(attribute.databaseValue) else null;
     
     shared actual EntityType? convertToEntityAttribute(JString? attribute)
             => if (exists attribute) then findEntityValue<EntityType, String>(attribute.string) else null;
+    
+    shared actual EntityType? parse(String? text, Locale locale)
+            => if (exists text) then convertToEntityAttribute(nativeString(text)) else null;
+    
+    shared actual String? print(EntityType? entity, Locale locale)
+            => convertToDatabaseColumn(entity)?.string;
 }

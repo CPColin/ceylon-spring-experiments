@@ -13,6 +13,10 @@ import javax.persistence {
     converter
 }
 
+import org.springframework.stereotype {
+    component
+}
+
 //"A [[Product]] type column that uses integers as the ID."
 //shared class ProductType
 //        of unknown | mug | shirt
@@ -31,6 +35,7 @@ import javax.persistence {
 shared class ProductType
         of unknown | mug | shirt
         extends EnumeratedStringColumn {
+    component
     converter { autoApply = true; }
     shared static class Converter() extends EnumeratedStringColumnConverter<ProductType>() {}
     

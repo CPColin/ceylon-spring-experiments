@@ -20,9 +20,9 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">Product Type:</label>
         <div class="col-sm-10">
-          <select data-th-field="*{productType}">
+          <select data-th-field="*{productType}" data-th-remove="all-but-first">
             <option data-th-each="type : ${T(demo.domain.ProductType).getJvalues()}" data-th-value="${type.databaseValue}" data-th-text="${type}">Option1</option>
-            <option value="2" data-th-remove="all">Option2</option>
+            <option value="2">Option2</option>
           </select>
         </div>
       </div>
