@@ -21,8 +21,13 @@ import org.springframework.stereotype {
 //shared class ProductType
 //        of unknown | mug | shirt
 //        extends EnumeratedIntegerColumn {
+//    component
 //    converter { autoApply = true; }
 //    shared static class Converter() extends EnumeratedIntegerColumnConverter<ProductType>() {}
+//    
+//    shared static {ProductType*} cvalues => cv(`ProductType`);
+//    
+//    shared static JIterable<ProductType> jvalues => jv(`ProductType`);
 //    
 //    shared new unknown extends EnumeratedIntegerColumn(0) {}
 //    

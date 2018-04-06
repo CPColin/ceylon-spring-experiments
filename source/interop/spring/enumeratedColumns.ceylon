@@ -58,38 +58,69 @@ shared JIterable<EntityType> jvalues<EntityType>(Type<EntityType> entityType) {
     return JavaIterable(cvalues(entityType));
 }
 
-"A converter between [[EntityType]]s that use [[Integer]]s and database tables that use [[JLong]]s."
-shared abstract class EnumeratedIntegerColumnConverter<EntityType>()
-        satisfies AttributeConverter<EntityType, JLong> & Formatter<EntityType>
-        given EntityType satisfies EnumeratedIntegerColumn {
-    shared actual JLong? convertToDatabaseColumn(EntityType? attribute)
-            => if (exists attribute) then JLong(attribute.databaseValue) else null;
+"Converts between [[EntityType]] instances that intend to use ID's with [[CeylonType]] in Ceylon
+ code and [[DatabaseType]] in the database."
+shared abstract class EnumeratedColumnConverter<EntityType, CeylonType, DatabaseType>()
+        satisfies AttributeConverter<EntityType, DatabaseType> & Formatter<EntityType>
+        given EntityType satisfies EnumeratedColumn<CeylonType>
+        given CeylonType satisfies Object
+        given DatabaseType satisfies Object {
+    "Converts the given [[ceylonValue]] to a [[DatabaseType]] value. Inverse of [[databaseToCeylon]]."
+    shared formal DatabaseType ceylonToDatabase(CeylonType ceylonValue);
     
-    shared actual EntityType? convertToEntityAttribute(JLong? attribute)
-            => if (exists attribute) then findEntityValue<EntityType, Integer>(attribute.longValue()) else null;
+    "Converts the given [[databaseValue]] to a [[CeylonType]] value. Inverse of [[ceylonToDatabase]]."
+    shared formal CeylonType databaseToCeylon(DatabaseType databaseValue);
     
-    shared actual EntityType? parse(String? text, Locale locale)
-            => if (exists text, is Integer longValue = Integer.parse(text))
-                then convertToEntityAttribute(JLong(longValue))
+    "Converts the given [[stringValue]] to a [[CeylonType]] value, if possible."
+    shared formal CeylonType? stringToCeylon(String stringValue);
+    
+    "Converts the given [[entityValue]] to a [[DatabaseType]] value, for storage in the database.
+     Inverse of [[convertToEntityAttribute]]."
+    shared actual DatabaseType? convertToDatabaseColumn(EntityType? entityValue)
+            => if (exists entityValue) then ceylonToDatabase(entityValue.databaseValue) else null;
+    
+    "Converts the given [[databaseValue]] to an equivalent [[EntityType]] value, if possible.
+     Inverse of [[convertToDatabaseColumn]]."
+    shared actual EntityType? convertToEntityAttribute(DatabaseType? databaseValue)
+            => if (exists databaseValue)
+                then findEntityValue<EntityType, CeylonType>(databaseToCeylon(databaseValue))
                 else null;
     
-    shared actual String? print(EntityType? entity, Locale locale)
-            => convertToDatabaseColumn(entity)?.string;
+    "Converts the given [[stringValue]] to an equivalent [[EntityType]] value, if possible. Inverse
+     of [[print]]."
+    shared actual EntityType? parse(String? stringValue, Locale locale)
+            => if (exists stringValue, is CeylonType ceylonValue = stringToCeylon(stringValue))
+                then findEntityValue<EntityType, CeylonType>(ceylonValue)
+                else null;
+    
+    "Converts the given [[entityValue]] to a Ceylon [[String]]. Inverse of [[parse]]."
+    shared actual String? print(EntityType? entityValue, Locale locale)
+            => if (exists entityValue) then entityValue.databaseValue.string else null;
 }
 
-"A converter between [[EntityType]]s that use [[String]]s and database tables that use [[JString]]s."
+"A converter between [[EntityType]]s that use [[Integer]] ID's and database tables that use
+ [[JLong]]s."
+shared abstract class EnumeratedIntegerColumnConverter<EntityType>()
+        extends EnumeratedColumnConverter<EntityType, Integer, JLong>()
+        given EntityType satisfies EnumeratedColumn<Integer> {
+    shared actual JLong ceylonToDatabase(Integer ceylonValue) => JLong(ceylonValue);
+    
+    shared actual Integer databaseToCeylon(JLong databaseValue) => databaseValue.longValue();
+    
+    shared actual Integer? stringToCeylon(String stringValue)
+            => if (is Integer ceylonValue = Integer.parse(stringValue))
+                then ceylonValue
+                else null;
+}
+
+"A converter between [[EntityType]]s that use [[String]] ID's and database tables that use
+ [[JString]]s."
 shared abstract class EnumeratedStringColumnConverter<EntityType>()
-        satisfies AttributeConverter<EntityType, JString> & Formatter<EntityType>
-        given EntityType satisfies EnumeratedStringColumn {
-    shared actual JString? convertToDatabaseColumn(EntityType? attribute)
-            => if (exists attribute) then nativeString(attribute.databaseValue) else null;
+        extends EnumeratedColumnConverter<EntityType, String, JString>()
+        given EntityType satisfies EnumeratedColumn<String> {
+    shared actual JString ceylonToDatabase(String ceylonValue) => nativeString(ceylonValue);
     
-    shared actual EntityType? convertToEntityAttribute(JString? attribute)
-            => if (exists attribute) then findEntityValue<EntityType, String>(attribute.string) else null;
+    shared actual String databaseToCeylon(JString databaseValue) => databaseValue.string;
     
-    shared actual EntityType? parse(String? text, Locale locale)
-            => if (exists text) then convertToEntityAttribute(nativeString(text)) else null;
-    
-    shared actual String? print(EntityType? entity, Locale locale)
-            => convertToDatabaseColumn(entity)?.string;
+    shared actual String stringToCeylon(String stringValue) => stringValue;
 }
