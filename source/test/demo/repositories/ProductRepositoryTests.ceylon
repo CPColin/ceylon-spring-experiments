@@ -15,7 +15,8 @@ import ceylon.test {
 }
 
 import demo.domain {
-    Product
+    Product,
+    ProductType
 }
 import demo.repositories {
     ProductRepository
@@ -63,6 +64,7 @@ shared class ProductRepositoryTests() {
         product.imageUrl = "";
         product.price = BigDecimal.zero;
         product.productId = "1234";
+        product.productType = ProductType.mug;
 
         return product;
     }
@@ -520,7 +522,8 @@ shared class ProductRepositoryTests() {
             () => assertEquals(actual.description, expected.description),
             () => assertEquals(actual.imageUrl, expected.imageUrl),
             //() => assertEquals(actual.price, expected.price),
-            () => assertEquals(actual.productId, expected.productId)
+            () => assertEquals(actual.productId, expected.productId),
+            () => assertEquals(actual.productType, expected.productType)
         ], message);
     }
 }
