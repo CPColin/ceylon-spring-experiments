@@ -29,11 +29,15 @@ import org.springframework.stereotype {
 //    
 //    shared static JIterable<ProductType> jvalues => jv(`ProductType`);
 //    
-//    shared new unknown extends EnumeratedIntegerColumn(0) {}
+//    String name;
 //    
-//    shared new mug extends EnumeratedIntegerColumn(10) {}
+//    shared new unknown extends EnumeratedIntegerColumn(0) { name = "Unknown"; }
 //    
-//    shared new shirt extends EnumeratedIntegerColumn(20) {}
+//    shared new mug extends EnumeratedIntegerColumn(10) { name = "Mug"; }
+//    
+//    shared new shirt extends EnumeratedIntegerColumn(20) { name = "Shirt"; }
+//    
+//    string = name;
 //}
 
 "A [[Product]] type column that uses strings as the ID."
@@ -53,4 +57,6 @@ shared class ProductType
     shared new mug extends EnumeratedStringColumn("Mug") {}
     
     shared new shirt extends EnumeratedStringColumn("Shirt") {}
+    
+    string => databaseValue;
 }
