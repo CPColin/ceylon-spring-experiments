@@ -55,8 +55,7 @@ class SecurityConfiguration() extends WebSecurityConfigurerAdapter() {
                 .permitAll()
         ;
         
-        // Allow the DB Console to work right.
-        // TODO: See if these lines are still needed.
+        // Allow the DB Console to work right. Also allow "/logout" to work with a GET request.
         httpSecurity.csrf().disable();
         httpSecurity.headers().frameOptions().disable();
     }
