@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Controls</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
+        rel="stylesheet"
+        media="screen" />
+</head>
+<body>
+  <div class="container">
+    <form class="form-horizontal" action="#">
+    
+      <div class="form-group" data-th-fragment="text(label, fieldName)">
+        <label class="col-sm-2 control-label" for="text" data-th-for="${fieldName}" data-th-text="${label} + ':'">Text:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="text" data-th-id="${fieldName}" data-th-field="*{__${fieldName}__}" />
+        </div>
+      </div>
+      
+      <div class="form-group" data-th-fragment="select(label, fieldName, values)">
+        <label class="col-sm-2 control-label" for="select" data-th-for="${fieldName}" data-th-text="${label} + ':'">Select:</label>
+        <div class="col-sm-10">
+          <select id="select" data-th-id="${fieldName}" data-th-field="*{__${fieldName}__}" data-th-remove="all-but-first">
+            <option data-th-each="value : ${values}" data-th-value="${value.databaseValue}" data-th-text="${value}">Option1</option>
+            <option value="2">Option2</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="row" data-th-fragment="submit(text)">
+        <button type="submit" class="btn btn-default" data-th-text="${text}">Submit</button>
+      </div>
+      
+    </form>
+  </div>
+</body>
+</html>
