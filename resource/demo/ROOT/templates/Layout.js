@@ -98,6 +98,18 @@ function doFormControls(destination, uri, fragment) {
         label.htmlFor = fragmentArguments[1];
         input.id = fragmentArguments[1];
         input.name = fragmentArguments[1];
+    } else if (fragmentName == "select") {
+        var label = element.querySelector("label");
+        var select = element.querySelector("select");
+        
+        label.innerHTML = fragmentArguments[0] + ":";
+        label.htmlFor = fragmentArguments[1];
+        select.id = fragmentArguments[1];
+        select.name = fragmentArguments[1];
+    } else if (fragmentName == "submit") {
+        var button = element.querySelector("button");
+        
+        button.innerHTML = fragmentArguments[0];
     }
     
     destination.parentNode.replaceChild(element, destination);
