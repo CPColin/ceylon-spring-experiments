@@ -49,70 +49,75 @@ function doFragments() {
     
     for (var i = 0; i < elements.length; i++) {
         var element = elements[i];
-        var fragmentExpression = element.attributes["data-th-replace"].value;
-        var tokens = fragmentExpression.split("::");
+        var fragmentReplacement = element.attributes["data-th-replace"].value;
+        var tokens = fragmentReplacement.split("::");
         var uri = tokens[0].trim();
-        var fragment = tokens[1].trim();
+        var fragmentExpression = tokens[1].trim();
         
-        if (uri == "fragments/formControls.html") {
-            doFormControls(element, uri, fragment);
-        }
+        doFragment(element, uri, fragmentExpression);
     }
 }
 
-function getFragmentName(fragment) {
-    return fragment.split("(")[0];
-}
-
-function getFragmentArguments(fragment) {
-    var argumentList = fragment.substring(fragment.indexOf("(") + 1, fragment.lastIndexOf(")"));
-    var arguments = argumentList.split(",");
-    
-    for (var i = 0; i < arguments.length; i++) {
-        var argument = arguments[i].trim();
-        
-        if (argument.startsWith("'") && argument.endsWith("'")) {
-            argument = argument.substring(1, argument.length - 1);
-        }
-        
-        arguments[i] = argument;
-    }
-    
-    return arguments;
-}
-
-function doFormControls(destination, uri, fragment) {
-    var fragmentName = getFragmentName(fragment);
-    var fragmentArguments = getFragmentArguments(fragment);
+function doFragment(destination, uri, fragmentExpression) {
     var html = document.createElement("html");
     
     html.innerHTML = doRequest(uri);
         
+    var fragmentName = getFragmentName(fragmentExpression);
     var element = html.querySelector("[data-th-fragment^=" + fragmentName + "]");
+    var firstChild = element.childNodes[0];
+    var secondChild = element.childNodes[1];
+    var comment;
+    
+    if (firstChild && firstChild.nodeType == 8) {
+        comment = firstChild;
+    } else if (secondChild && secondChild.nodeType == 8) {
+        comment = secondChild;
+    }
 
-    if (fragmentName == "text") {
-        var label = element.querySelector("label");
-        var input = element.querySelector("input");
+    if (comment) {
+        var parameters = getFragmentParameters(element.attributes["data-th-fragment"].value);
+        var arguments = getFragmentArguments(fragmentExpression);
+        var statement = "((element, " + parameters + ") => { " + comment.nodeValue + " })"
+            + "(element, " + arguments + ")";
+
+        eval(statement);
         
-        label.innerHTML = fragmentArguments[0] + ":";
-        label.htmlFor = fragmentArguments[1];
-        input.id = fragmentArguments[1];
-        input.name = fragmentArguments[1];
-    } else if (fragmentName == "select") {
-        var label = element.querySelector("label");
-        var select = element.querySelector("select");
+        element.removeChild(comment);
+    }
+
+    destination.parentNode.replaceChild(element, destination);
+}
+
+function getFragmentName(fragmentExpression) {
+    return fragmentExpression.split("(")[0];
+}
+
+function getFragmentParameters(fragmentExpression) {
+    return fragmentExpression.substring(
+        fragmentExpression.indexOf("(") + 1, fragmentExpression.lastIndexOf(")"));
+}
+
+function getFragmentArguments(fragmentExpression) {
+    var argumentList = getFragmentParameters(fragmentExpression);
+    var arguments = argumentList.split(",");
+    var filteredArguments = "";
+    
+    for (var i = 0; i < arguments.length; i++) {
+        if (filteredArguments.length) {
+            filteredArguments += ", ";
+        }
+
+        var argument = arguments[i].trim();
         
-        label.innerHTML = fragmentArguments[0] + ":";
-        label.htmlFor = fragmentArguments[1];
-        select.id = fragmentArguments[1];
-        select.name = fragmentArguments[1];
-    } else if (fragmentName == "submit") {
-        var button = element.querySelector("button");
-        
-        button.innerHTML = fragmentArguments[0];
+        if (argument.startsWith("$")) {
+            filteredArguments += "null";
+        } else {
+            filteredArguments += argument;
+        }
     }
     
-    destination.parentNode.replaceChild(element, destination);
+    return filteredArguments;
 }
 
 doLayout();
