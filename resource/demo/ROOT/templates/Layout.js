@@ -78,7 +78,8 @@ function doFragment(destination, uri, fragmentExpression) {
     if (comment) {
         var parameters = getFragmentParameters(element.attributes["data-th-fragment"].value);
         var arguments = getFragmentArguments(fragmentExpression);
-        var statement = "((element, " + parameters + ") => { " + comment.nodeValue + " })"
+        var content = stripThymeleafParserComment(comment.nodeValue);
+        var statement = "((element, " + parameters + ") => { " + content + " })"
             + "(element, " + arguments + ")";
 
         eval(statement);
@@ -118,6 +119,17 @@ function getFragmentArguments(fragmentExpression) {
     }
     
     return filteredArguments;
+}
+
+function stripThymeleafParserComment(comment) {
+    if (comment.startsWith("/*")) {
+        comment = comment.substring("/*".length);
+    }
+    if (comment.endsWith("*/")) {
+        comment = comment.substring(0, comment.length - "*/".length);
+    }
+    
+    return comment;
 }
 
 doLayout();
