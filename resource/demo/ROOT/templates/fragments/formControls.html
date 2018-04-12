@@ -12,7 +12,7 @@
     <form class="form-horizontal" action="#">
     
       <div class="form-group" data-th-fragment="text(labelText, fieldName)">
-        <!--
+        <!--/*
           var label = element.querySelector("label");
           var input = element.querySelector("input");
           
@@ -20,7 +20,7 @@
           label.htmlFor = fieldName;
           input.id = fieldName;
           input.name = fieldName;
-        -->
+        */-->
         <label class="col-sm-2 control-label" for="text" data-th-for="${fieldName}" data-th-text="${labelText} + ':'">Text:</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="text" data-th-id="${fieldName}" data-th-field="*{__${fieldName}__}" />
@@ -28,7 +28,7 @@
       </div>
       
       <div class="form-group" data-th-fragment="select(labelText, fieldName, values)">
-        <!--
+        <!--/*
           var label = element.querySelector("label");
           var select = element.querySelector("select");
           
@@ -36,7 +36,7 @@
           label.htmlFor = fieldName;
           select.id = fieldName;
           select.name = fieldName;
-        -->
+        */-->
         <label class="col-sm-2 control-label" for="select" data-th-for="${fieldName}" data-th-text="${labelText} + ':'">Select:</label>
         <div class="col-sm-10">
           <select id="select" data-th-id="${fieldName}" data-th-field="*{__${fieldName}__}" data-th-remove="all-but-first">
@@ -47,11 +47,11 @@
       </div>
       
       <div class="row text-center" data-th-fragment="submit(text)">
-        <!--
+        <!--/*
           var button = element.querySelector("button");
 
           button.innerHTML = text;
-        -->
+        */-->
         <button type="submit" class="btn btn-primary" data-th-text="${text}">Submit</button>
       </div>
       
