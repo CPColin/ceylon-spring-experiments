@@ -27,6 +27,29 @@
         </div>
       </div>
       
+      <fieldset class="form-group" data-th-fragment="radio(legendText, fieldName, values)">
+        <!--/*
+          var legend = element.querySelector("legend");
+          var radios = element.querySelectorAll("input[type=radio]");
+          
+          element.name = fieldName;
+          legend.innerHTML = legendText + ":";
+          
+          for (var i = 0; i < radios.length; i++) {
+             radios[i].name = fieldName;
+          }
+        */-->
+        <legend data-th-text="${legendText}">Legend:</legend>
+        <div class="form-check" data-th-each="value : ${values}">
+          <input type="radio" name="radio" value="" id="radio1" class="form-check-input" data-th-id="${fieldName} + '-' + ${value.databaseValue}" data-th-field="*{__${fieldName}__}" data-th-value="${value}" />
+          <label class="form-check-label" for="radio1" data-th-for="${fieldName} + '-' + ${value.databaseValue}" data-th-text="${value}">Radio1</label>
+        </div>
+        <div class="form-check" data-th-remove="all">
+          <input type="radio" name="radio" value="" id="radio2" class="form-check-input" />
+          <label class="form-check-label" for="radio2">Radio2</label>
+        </div>
+      </fieldset>
+      
       <div class="form-group" data-th-fragment="select(labelText, fieldName, values)">
         <!--/*
           var label = element.querySelector("label");
@@ -41,7 +64,7 @@
         <div class="col-sm-10">
           <select id="select" data-th-id="${fieldName}" data-th-field="*{__${fieldName}__}" data-th-remove="all-but-first">
             <option data-th-each="value : ${values}" data-th-value="${value.databaseValue}" data-th-text="${value}">Option1</option>
-            <option value="2">Option2</option>
+            <option value="">Option2</option>
           </select>
         </div>
       </div>
