@@ -2,9 +2,12 @@
  utility functionality for working with Spring."
 native("jvm")
 module interop.spring "1.0.0" {
+    value ceylonVersion = "1.3.3";
+    
     shared import java.base "8";
     
-    shared import ceylon.interop.java "1.3.3";
+    shared import ceylon.interop.java ceylonVersion;
+    shared optional import ceylon.time ceylonVersion;
     
     shared import maven:org.springframework.data:"spring-data-commons" "2.0.5.RELEASE";
     shared import maven:org.springframework.data:"spring-data-jpa" "2.0.5.RELEASE";
