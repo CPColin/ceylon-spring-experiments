@@ -5,6 +5,9 @@ import demo.services {
     ProductService
 }
 
+import org.apache.logging.log4j {
+    LogManager
+}
 import org.springframework.beans.factory.annotation {
     autowired
 }
@@ -20,6 +23,9 @@ import org.springframework.stereotype {
 import org.springframework.ui {
     Model
 }
+import org.springframework.validation {
+    BindingResult
+}
 import org.springframework.web.bind.annotation {
     RequestMethod,
     pathVariable,
@@ -29,6 +35,8 @@ import org.springframework.web.bind.annotation {
 controller
 class ProductController() {
     autowired late ProductService productService;
+    
+    value log = LogManager.getLogger(`ProductController`);
     
     requestMapping(["product/delete/{id}"])
     secured(["ROLE_ADMIN"])
@@ -76,7 +84,9 @@ class ProductController() {
     
     requestMapping { \ivalue = ["product"]; method = [RequestMethod.post]; }
     secured(["ROLE_ADMIN"])
-    shared String saveProduct(Product product) {
+    shared String saveProduct(Product product, BindingResult bindingResult) {
+        log.info(bindingResult.allErrors.string);
+        
         value savedProduct = productService.save(product);
         
         return "redirect:product/``savedProduct.id else 0``";

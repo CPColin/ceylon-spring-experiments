@@ -7,7 +7,9 @@ module demo "1.0.0" {
     
     shared import java.base javaVersion;
     shared import java.jdbc javaVersion;
+    
     import ceylon.interop.java ceylonVersion;
+    import ceylon.time ceylonVersion;
     
     // Repository utility code
     shared import interop.spring "1.0.0";

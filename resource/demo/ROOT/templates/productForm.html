@@ -18,6 +18,9 @@
       <div data-th-replace="fragments/formControls.html :: text('Price', 'price')"></div>
       <div data-th-replace="fragments/formControls.html :: text('Image URL', 'imageUrl')"></div>
       
+      <label for="expirationDate">Expiration Date</label>
+      <input type="date" id="expirationDate" data-th-field="*{expirationDate}">
+      
       <div data-th-replace="fragments/formControls.html :: submit('Save')"></div>
       
     </form>

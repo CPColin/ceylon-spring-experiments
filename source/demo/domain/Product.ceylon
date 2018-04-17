@@ -1,3 +1,8 @@
+import ceylon.time {
+    Date,
+    today
+}
+
 import java.math {
     BigDecimal
 }
@@ -16,4 +21,5 @@ shared class Product() extends Entity() {
     shared variable String description = "";
     shared variable String imageUrl = "";
     shared variable BigDecimal price = BigDecimal.zero;
+    shared variable Date expirationDate = today();
 }
