@@ -18,6 +18,9 @@ import interop.spring.dates {
     DateConverter
 }
 
+import java.sql {
+    JDate=Date
+}
 import java.util {
     Calendar,
     GregorianCalendar
@@ -50,7 +53,7 @@ parameters(`value testConvertToAndFromParameters`)
 shared void testConvertToAndFrom(Integer year, Month ceylonMonth, Integer javaMonth, Integer day) {
     value ceylonDate = date(year, ceylonMonth, day);
     value calendar = GregorianCalendar(year, javaMonth, day);
-    value javaDate = calendar.time;
+    value javaDate = JDate(calendar.time.time);
     value converter = DateConverter();
     
     assertEquals(converter.convertToDatabaseColumn(ceylonDate), javaDate);
