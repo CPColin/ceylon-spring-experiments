@@ -3,10 +3,12 @@ import ceylon.time {
     date
 }
 
+import java.sql {
+    JDate=Date
+}
 import java.util {
     Calendar,
     GregorianCalendar,
-    JDate=Date,
     Locale
 }
 
@@ -47,7 +49,7 @@ shared class DateConverter
                 ceylonValue.month.integer - 1,
                 ceylonValue.day);
             
-            return calendar.time;
+            return JDate(calendar.time.time);
         } else {
             return null;
         }

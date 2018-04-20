@@ -5,6 +5,7 @@ module interop.spring "1.0.0" {
     value ceylonVersion = "1.3.3";
     
     shared import java.base "8";
+    shared import java.jdbc "8";
     
     shared import ceylon.interop.java ceylonVersion;
     shared optional import ceylon.time ceylonVersion;
