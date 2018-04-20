@@ -88,8 +88,5 @@ shared class DateConverter
         return null;
     }
     
-    shared actual String? print(Date? ceylonValue, Locale? locale)
-            => if (exists ceylonValue)
-                then ceylonValue.string
-                else null;
+    shared actual String? print(Date? ceylonValue, Locale? locale) => ceylonValue?.string;
 }
