@@ -1,5 +1,7 @@
 import ceylon.time {
     Date,
+    Time,
+    time,
     today
 }
 
@@ -22,4 +24,5 @@ shared class Product() extends Entity() {
     shared variable String imageUrl = "";
     shared variable BigDecimal price = BigDecimal.zero;
     shared variable Date expirationDate = today();
+    shared variable Time expirationTime = time(12, 34, 56);
 }

@@ -21,6 +21,9 @@
       <label for="expirationDate">Expiration Date</label>
       <input type="date" id="expirationDate" data-th-field="*{expirationDate}">
       
+      <label for="expirationDate">Expiration Time</label>
+      <input type="time" id="expirationTime" step="0.001" data-th-field="*{expirationTime}">
+      
       <div data-th-replace="fragments/formControls.html :: submit('Save')"></div>
       
     </form>

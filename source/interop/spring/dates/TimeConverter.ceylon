@@ -1,8 +1,9 @@
 import ceylon.time {
-    Time
+    Time,
+    time
 }
-import ceylon.time.internal {
-    TimeOfDay
+import ceylon.time.base {
+    milliseconds
 }
 import ceylon.time.iso8601 {
     parseTime
@@ -10,6 +11,9 @@ import ceylon.time.iso8601 {
 
 import java.sql {
     JTime=Time
+}
+import java.time {
+    LocalTime
 }
 import java.util {
     Locale
@@ -31,14 +35,30 @@ component
 converter { autoApply = true; }
 shared class TimeConverter()
         satisfies AttributeConverter<Time, JTime> & Formatter<Time> {
-    shared actual JTime? convertToDatabaseColumn(Time? ceylonValue)
-            => if (exists ceylonValue)
-                then JTime(ceylonValue.millisecondsOfDay)
-                else null;
+    shared actual JTime? convertToDatabaseColumn(Time? ceylonValue) {
+        if (exists ceylonValue) {
+            value databaseValue = JTime.valueOf(LocalTime.\iof(
+                ceylonValue.hours,
+                ceylonValue.minutes,
+                ceylonValue.seconds));
+            
+            // JTime.valueOf() ignores milliseconds, so we have to add them ourselves.
+            databaseValue.time += ceylonValue.milliseconds;
+            
+            return databaseValue;
+        } else {
+            return null;        
+        }
+    }
     
     shared actual Time? convertToEntityAttribute(JTime? databaseValue)
-            => if (exists databaseValue)
-                then TimeOfDay(databaseValue.time)
+            => if (exists databaseValue, exists localTime = databaseValue.toLocalTime())
+                then time(
+                    localTime.hour,
+                    localTime.minute,
+                    localTime.second,
+                    // JTime.toLocalTime() omits milliseconds, so we have to get them ourselves.
+                    databaseValue.time % milliseconds.perSecond)
                 else null;
     
     shared actual Time? parse(String? stringValue, Locale? locale)
