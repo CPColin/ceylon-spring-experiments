@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation {
 configuration
 enableAutoConfiguration
 // This package might as well be called demo.entity instead, huh?
-entityScan { basePackages = ["demo.domain", "interop.spring.dates"]; }
+entityScan { basePackages = ["demo.domain"]; }
 // Scan our repository instances and specify the concrete class to use during injection.
 enableJpaRepositories {
     basePackages = ["demo.repositories"];
