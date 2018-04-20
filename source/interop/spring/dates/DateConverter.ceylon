@@ -24,8 +24,22 @@ import org.springframework.stereotype {
 
 component
 converter { autoApply = true; }
-shared class DateConverter()
+shared class DateConverter
         satisfies AttributeConverter<Date, JDate> & Formatter<Date> {
+    static shared String formatDigits(Integer val, Integer digits) {
+        value stringBuilder = StringBuilder();
+        
+        stringBuilder.append(val.string);
+        
+        while (stringBuilder.size < digits) {
+            stringBuilder.prepend("0");
+        }
+        
+        return stringBuilder.string;
+    }
+    
+    shared new() {}
+    
     shared actual JDate? convertToDatabaseColumn(Date? ceylonValue) {
         if (exists ceylonValue) {
             value calendar = GregorianCalendar(
@@ -84,16 +98,4 @@ shared class DateConverter()
             => if (exists ceylonValue)
                 then "``formatDigits(ceylonValue.year, 4)``-``formatDigits(ceylonValue.month.integer, 2)``-``formatDigits(ceylonValue.day, 2)``"
                 else null;
-    
-    String formatDigits(Integer val, Integer digits) {
-        value stringBuilder = StringBuilder();
-        
-        stringBuilder.append(val.string);
-        
-        while (stringBuilder.size < digits) {
-            stringBuilder.prepend("0");
-        }
-        
-        return stringBuilder.string;
-    }
 }
