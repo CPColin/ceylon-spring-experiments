@@ -85,7 +85,9 @@ class ProductController() {
     requestMapping { \ivalue = ["product"]; method = [RequestMethod.post]; }
     secured(["ROLE_ADMIN"])
     shared String saveProduct(Product product, BindingResult bindingResult) {
-        log.info(bindingResult.allErrors.string);
+        if (!bindingResult.allErrors.empty) {
+            log.info("Errors: ``bindingResult.allErrors``");
+        }
         
         value savedProduct = productService.save(product);
         
