@@ -1,5 +1,6 @@
 import interop.spring.dates {
-    DateConverter
+    DateConverter,
+    TimeConverter
 }
 
 import org.springframework.boot.autoconfigure.domain {
@@ -22,5 +23,6 @@ entityScan { basePackages = ["interop.spring.dates"]; }
 shared class WebMvcConfiguration() satisfies WebMvcConfigurer {
     shared actual void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(DateConverter());
+        registry.addFormatter(TimeConverter());
     }
 }

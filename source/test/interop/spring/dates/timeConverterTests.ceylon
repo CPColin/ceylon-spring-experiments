@@ -7,9 +7,6 @@ import ceylon.time {
     Time,
     time
 }
-import ceylon.time.base {
-    milliseconds
-}
 
 import interop.spring.dates {
     TimeConverter
@@ -17,6 +14,9 @@ import interop.spring.dates {
 
 import java.sql {
     JTime=Time
+}
+import java.time {
+    LocalTime
 }
 
 {[Integer, Integer, Integer, Integer]*} testConvertTimeParameters = {
@@ -31,12 +31,10 @@ test
 parameters(`value testConvertTimeParameters`)
 shared void testConvertTime(Integer hour, Integer minute, Integer second, Integer millisecond) {
     value ceylonValue = time(hour, minute, second, millisecond);
-    value javaValue = JTime(
-        (hour * milliseconds.perHour)
-        + (minute * milliseconds.perMinute)
-        + (second * milliseconds.perSecond)
-        + millisecond
-    );
+    value javaValue = JTime.valueOf(LocalTime.\iof(hour, minute, second));
+    
+    javaValue.time += millisecond;
+    
     value converter = TimeConverter();
     
     assertEquals(converter.convertToDatabaseColumn(ceylonValue), javaValue);
