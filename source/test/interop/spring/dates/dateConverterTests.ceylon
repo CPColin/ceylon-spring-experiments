@@ -41,7 +41,7 @@ shared void testFormatDigits(Integer val, Integer digits, String expected) {
     assertEquals(DateConverter.formatDigits(val, digits), expected);
 }
 
-{[Integer, Month, Integer, Integer]*} testConvertToAndFromParameters = {
+{[Integer, Month, Integer, Integer]*} testConvertDateParameters = {
     [2000, january, Calendar.january, 1],
     [2000, february, Calendar.february, 1],
     [2000, february, Calendar.february, 29],
@@ -49,18 +49,18 @@ shared void testFormatDigits(Integer val, Integer digits, String expected) {
 };
 
 test
-parameters(`value testConvertToAndFromParameters`)
-shared void testConvertToAndFrom(Integer year, Month ceylonMonth, Integer javaMonth, Integer day) {
-    value ceylonDate = date(year, ceylonMonth, day);
+parameters(`value testConvertDateParameters`)
+shared void testConvertDate(Integer year, Month ceylonMonth, Integer javaMonth, Integer day) {
+    value ceylonValue = date(year, ceylonMonth, day);
     value calendar = GregorianCalendar(year, javaMonth, day);
-    value javaDate = JDate(calendar.time.time);
+    value javaValue = JDate(calendar.time.time);
     value converter = DateConverter();
     
-    assertEquals(converter.convertToDatabaseColumn(ceylonDate), javaDate);
-    assertEquals(converter.convertToEntityAttribute(javaDate), ceylonDate);
+    assertEquals(converter.convertToDatabaseColumn(ceylonValue), javaValue);
+    assertEquals(converter.convertToEntityAttribute(javaValue), ceylonValue);
 }
 
-{[String, Date]*} testParseAndPrintParameters = {
+{[String, Date]*} testParseAndPrintDateParameters = {
     ["2000-01-01", date(2000, january, 1)],
     ["2000-02-01", date(2000, february, 1)],
     ["2000-02-29", date(2000, february, 29)],
@@ -68,8 +68,8 @@ shared void testConvertToAndFrom(Integer year, Month ceylonMonth, Integer javaMo
 };
 
 test
-parameters(`value testParseAndPrintParameters`)
-shared void testParseAndPrint(String stringValue, Date ceylonValue) {
+parameters(`value testParseAndPrintDateParameters`)
+shared void testParseAndPrintDate(String stringValue, Date ceylonValue) {
     value converter = DateConverter();
     
     assertEquals(converter.parse(stringValue, null), ceylonValue);
