@@ -1,6 +1,7 @@
 import interop.spring.dates {
     DateConverter,
-    TimeConverter
+    TimeConverter,
+    YearMonthConverter
 }
 
 import org.springframework.boot.autoconfigure.domain {
@@ -24,5 +25,6 @@ shared class WebMvcConfiguration() satisfies WebMvcConfigurer {
     shared actual void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(DateConverter());
         registry.addFormatter(TimeConverter());
+        registry.addFormatter(YearMonthConverter());
     }
 }

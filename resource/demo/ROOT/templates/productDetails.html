@@ -41,13 +41,25 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">Expiration Date:</label>
         <div class="col-sm-10">
-          <p class="form-control-static" data-th-text="${product.expirationDate}">URL</p>
+          <p class="form-control-static" data-th-text="${product.expirationDate}">Date</p>
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Expiration Time:</label>
         <div class="col-sm-10">
-          <p class="form-control-static" data-th-text="${product.expirationTime}">URL</p>
+          <p class="form-control-static" data-th-text="${product.expirationTime}">Time</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Expiration Month:</label>
+        <div class="col-sm-10">
+          <p class="form-control-static" data-th-text="${product.expirationMonth}">Month</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Last Updated:</label>
+        <div class="col-sm-10">
+          <p class="form-control-static" data-th-text="${product.lastUpdated}">Last Updated</p>
         </div>
       </div>
     </form>
