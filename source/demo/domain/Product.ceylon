@@ -1,8 +1,13 @@
 import ceylon.time {
     Date,
     Time,
+    YearMonth,
     time,
-    today
+    today,
+    yearMonth
+}
+import ceylon.time.base {
+    march
 }
 
 import java.math {
@@ -25,4 +30,5 @@ shared class Product() extends Entity() {
     shared variable BigDecimal price = BigDecimal.zero;
     shared variable Date expirationDate = today();
     shared variable Time expirationTime = time(12, 34, 56);
+    shared variable YearMonth expirationMonth = yearMonth(2010, march);
 }
