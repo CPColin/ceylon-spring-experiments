@@ -59,7 +59,9 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">Last Updated:</label>
         <div class="col-sm-10">
-          <p class="form-control-static" data-th-text="${product.lastUpdated}">Last Updated</p>
+          <p class="form-control-static">
+            <time data-th-replace="fragments/time.html :: time(${product.lastUpdated})">Time</time>
+          </p>
         </div>
       </div>
     </form>

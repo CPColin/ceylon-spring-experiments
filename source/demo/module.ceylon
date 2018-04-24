@@ -24,4 +24,6 @@ module demo "1.0.0" {
     import maven:com.h2database:"h2" "1.4.196";
     
     import maven:org.webjars:"bootstrap" "3.3.7-1";
+    
+    import maven:org.webjars:"momentjs" "2.21.0";
 }
