@@ -279,6 +279,7 @@ shared class ProductRepositoryTests() {
         
         value expectedProductDescriptions = products
                 .map((product) => product.description)
+                .filter((description) => description.contains(targetWord))
                 .sort(byIncreasing(identity<String>))
                 .sequence();
         
