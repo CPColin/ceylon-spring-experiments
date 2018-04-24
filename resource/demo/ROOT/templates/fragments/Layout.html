@@ -7,6 +7,9 @@
         data-th-href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"
         rel="stylesheet"
         media="screen" />
+  <script src="http://cdn.jsdelivr.net/webjars/momentjs/2.21.0/min/moment.min.js"
+          data-th-href="@{/webjars/momentjs/2.21.0/min/moment.min.js}">
+  </script>
 <style data-th-include="${style}"></style>
 </head>
 <body>
@@ -44,5 +47,19 @@
     
     <div id="content" data-th-include="${content} ?: _"></div>
   </div>
+  <script>
+  //<![CDATA[
+  var times = document.querySelectorAll("time");
+  
+  for (var i = 0; i < times.length; i++) {
+      var time = times[i];
+      var datetime = time.attributes["datetime"];
+      
+      if (datetime) {
+          time.innerHTML = moment(datetime.value, moment.ISO_8601).local().format();
+      }
+  }
+  //]]>
+  </script>
 </body>
 </html>

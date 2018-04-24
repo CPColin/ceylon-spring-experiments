@@ -65,6 +65,11 @@ function doFragment(destination, uri, fragmentExpression) {
         
     var fragmentName = getFragmentName(fragmentExpression);
     var element = html.querySelector("[data-th-fragment^=" + fragmentName + "]");
+    
+    if (!element) {
+        return;
+    }
+    
     var firstChild = element.childNodes[0];
     var secondChild = element.childNodes[1];
     var comment;
