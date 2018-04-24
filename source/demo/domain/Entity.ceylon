@@ -1,5 +1,6 @@
-import java.util {
-    Date
+import ceylon.time {
+    Instant,
+    now
 }
 
 import javax.persistence {
@@ -20,9 +21,9 @@ shared abstract class Entity() {
     version
     shared late Integer? version;
     
-    shared variable Date? dateCreated = null;
+    shared variable Instant? dateCreated = null;
     
-    shared variable Date? lastUpdated = null;
+    shared variable Instant? lastUpdated = null;
     
     "Indicates `true` if this entity has ever been saved to the database; that is, when its ID is not null or zero."
     shared Boolean saved => if (exists id) then id != 0 else false;
@@ -30,7 +31,7 @@ shared abstract class Entity() {
     preUpdate
     prePersist
     shared void updateTimeStamps() {
-        value instant = Date();
+        value instant = now();
         
         lastUpdated = instant;
         
