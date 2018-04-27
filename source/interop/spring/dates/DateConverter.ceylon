@@ -26,13 +26,8 @@ import org.springframework.stereotype {
 
 component
 converter { autoApply = true; }
-shared class DateConverter
+shared class DateConverter()
         satisfies AttributeConverter<Date, JDate> & Formatter<Date> {
-    static shared String formatDigits(Integer val, Integer digits)
-            => val.string.padLeading(digits, '0');
-    
-    shared new() {}
-    
     shared actual JDate? convertToDatabaseColumn(Date? ceylonValue) {
         if (exists ceylonValue) {
             value calendar = GregorianCalendar(
