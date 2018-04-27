@@ -21,7 +21,7 @@ import org.springframework.stereotype {
     component
 }
 
-"Converts a Ceylon [[Instant]] to a Java [[JDate]] with its timezone set to UTC."
+"Converts a Ceylon [[Instant]] to a Java [[JDate]], with its timezone converted to UTC."
 component
 converter { autoApply = true; }
 shared class InstantConverter()
@@ -29,9 +29,14 @@ shared class InstantConverter()
     shared actual JDate? convertToDatabaseColumn(Instant? ceylonValue) {
         if (exists ceylonValue) {
             value zoneDateTime = ceylonValue.zoneDateTime(timeZone.utc);
-            value calendar = GregorianCalendar(zoneDateTime.year, zoneDateTime.month.integer - 1,
-                zoneDateTime.day, zoneDateTime.hours, zoneDateTime.minutes, zoneDateTime.seconds);
+            value calendar = GregorianCalendar();
             
+            calendar.set(Calendar.year, zoneDateTime.year);
+            calendar.set(Calendar.month, zoneDateTime.month.integer - 1);
+            calendar.set(Calendar.dayOfMonth, zoneDateTime.day);
+            calendar.set(Calendar.hourOfDay, zoneDateTime.hours);
+            calendar.set(Calendar.minute, zoneDateTime.minutes);
+            calendar.set(Calendar.second, zoneDateTime.seconds);
             calendar.set(Calendar.millisecond, zoneDateTime.milliseconds);
             
             return calendar.time;
