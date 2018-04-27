@@ -26,21 +26,6 @@ import java.util {
     GregorianCalendar
 }
 
-{[Integer, Integer, String]*} testFormatDigitsParameters = {
-    [0, 2, "00"],
-    [1, 2, "01"],
-    [10, 2, "10"],
-    [100, 2, "100"],
-    [100, 4, "0100"],
-    [1000, 4, "1000"]
-};
-
-test
-parameters(`value testFormatDigitsParameters`)
-shared void testFormatDigits(Integer val, Integer digits, String expected) {
-    assertEquals(DateConverter.formatDigits(val, digits), expected);
-}
-
 {[Integer, Month, Integer, Integer]*} testConvertDateParameters = {
     [2000, january, Calendar.january, 1],
     [2000, february, Calendar.february, 1],
