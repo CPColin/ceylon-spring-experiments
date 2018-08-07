@@ -82,7 +82,7 @@ class ProductController() {
         return "productForm";
     }
     
-    requestMapping { \ivalue = ["product"]; method = [RequestMethod.post]; }
+    requestMapping { path = ["product"]; method = [RequestMethod.post]; }
     secured(["ROLE_ADMIN"])
     shared String saveProduct(Product product, BindingResult bindingResult) {
         if (!bindingResult.allErrors.empty) {
