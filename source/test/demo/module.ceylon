@@ -5,7 +5,7 @@ import ceylon.test {
 native("jvm")
 testExtension(`class SpringTestListener`)
 module test.demo "1.0.0" {
-    value springVersion = "5.0.4.RELEASE";
+    value springVersion = "5.0.9.RELEASE";
     
     import java.base "8";
     

@@ -3,7 +3,7 @@ native("jvm")
 module demo "1.0.0" {
     value ceylonVersion = "1.3.3";
     value javaVersion = "8";
-    value springBootVersion = "2.0.0.RELEASE";
+    value springBootVersion = "2.0.4.RELEASE";
     
     shared import java.base javaVersion;
     shared import java.jdbc javaVersion;
@@ -21,9 +21,9 @@ module demo "1.0.0" {
     
     import maven:org.thymeleaf.extras:"thymeleaf-extras-springsecurity4" "3.0.2.RELEASE";
     
-    import maven:com.h2database:"h2" "1.4.196";
+    import maven:com.h2database:"h2" "1.4.197";
     
     import maven:org.webjars:"bootstrap" "3.3.7-1";
     
-    import maven:org.webjars:"momentjs" "2.21.0";
+    import maven:org.webjars:"momentjs" "2.22.2";
 }
