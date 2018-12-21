@@ -1,3 +1,8 @@
+import ceylon.interop.java {
+    CeylonIterable,
+    JavaList
+}
+
 import java.util {
     Collections,
     JList=List
@@ -27,10 +32,18 @@ shared class User(
     manyToMany { fetch = FetchType.eager; }
     shared JList<Role> roles = Collections.emptyList<Role>())
         extends Entity() satisfies UserDetails {
-    // TODO: Figure out how to eliminate this variable annotation. Lazy compute and memoize?
     transient
-    shared actual variable JList<GrantedAuthority> authorities
-            = Collections.emptyList<GrantedAuthority>();
+    variable JList<GrantedAuthority>? _authorities = null;
+    
+    shared actual JList<GrantedAuthority> authorities
+            => _authorities else (_authorities = JavaList<GrantedAuthority>(concatenate(
+                    CeylonIterable(roles),
+                    {
+                        for (role in roles)
+                            for (authority in role.authorities)
+                                authority
+                    }
+                )));
     
     transient
     shared actual Boolean accountNonExpired = true;
