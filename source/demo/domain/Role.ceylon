@@ -1,6 +1,6 @@
 import java.util {
-    JList=List,
-    ArrayList
+    Collections,
+    JList=List
 }
 
 import javax.persistence {
@@ -14,12 +14,11 @@ import org.springframework.security.core {
 }
 
 entity
-shared class Role() extends Entity() satisfies GrantedAuthority {
-    shared variable String name = "";
-    
+shared class Role(
+    shared String name = "",
     manyToMany { fetch = FetchType.eager; }
-    shared variable JList<Authority> authorities = ArrayList<Authority>();
-    
+    shared variable JList<Authority> authorities = Collections.emptyList<Authority>())
+        extends Entity() satisfies GrantedAuthority {
     shared actual String authority => "ROLE_``name``";
     
     string => authority;

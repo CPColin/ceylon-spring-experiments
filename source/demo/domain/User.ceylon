@@ -1,5 +1,5 @@
 import java.util {
-    ArrayList,
+    Collections,
     JList=List
 }
 
@@ -19,19 +19,18 @@ import org.springframework.security.core.userdetails {
 }
 
 entity
-shared class User() extends Entity() satisfies UserDetails {
+shared class User(
     column { unique = true; }
-    shared actual variable String username = "";
-    
-    shared actual variable String password = "";
-    
-    shared actual variable Boolean enabled = true;
-    
+    shared actual String username = "",
+    shared actual String password = "",
+    shared actual Boolean enabled = true,
     manyToMany { fetch = FetchType.eager; }
-    shared variable JList<Role> roles = ArrayList<Role>();
-    
+    shared JList<Role> roles = Collections.emptyList<Role>())
+        extends Entity() satisfies UserDetails {
+    // TODO: Figure out how to eliminate this variable annotation. Lazy compute and memoize?
     transient
-    shared actual variable JList<GrantedAuthority> authorities = ArrayList<GrantedAuthority>();
+    shared actual variable JList<GrantedAuthority> authorities
+            = Collections.emptyList<GrantedAuthority>();
     
     transient
     shared actual Boolean accountNonExpired = true;

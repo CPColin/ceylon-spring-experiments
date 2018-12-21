@@ -50,9 +50,9 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     }
     
     Authority createAuthority(String name) {
-        value authority = Authority();
-        
-        authority.name = name;
+        value authority = Authority {
+            name = name;
+        };
         
         authorityService.save(authority);
         
@@ -62,10 +62,10 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     }
     
     Role createRole(String name, Authority* authorities) {
-        value role = Role();
-        
-        role.name = name;
-        role.authorities = JavaList(authorities);
+        value role = Role {
+            name = name;
+            authorities = JavaList(authorities);
+        };
         
         roleService.save(role);
         
@@ -76,15 +76,12 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     
     void createUsers(String usernamePrefix, Integer count, Role* roles) {
         for (id in 1..count) {
-            value user = User();
             value username = "``usernamePrefix````id``";
-            
-            user.username = username;
-            userService.setPassword(user, username);
-            
-            for (role in roles) {
-                user.roles.add(role);
-            }
+            value user = User {
+                username = username;
+                password = userService.encryptPassword(username);
+                roles = JavaList(roles);
+            };
             
             userService.save(user);
             

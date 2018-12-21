@@ -19,16 +19,13 @@ import javax.persistence {
 }
 
 entity
-shared class Product() extends Entity() {
-    // These all have to be annotated variable so Spring knows how to update them.
-    // Keeping logic out of these classes is probably a good idea, to make up for the mutability.
-    
-    shared variable String productId = "";
-    shared variable ProductType productType = ProductType.unknown;
-    shared variable String description = "";
-    shared variable String imageUrl = "";
-    shared variable BigDecimal price = BigDecimal.zero;
-    shared variable Date expirationDate = today();
-    shared variable Time expirationTime = time(12, 34, 56);
-    shared variable YearMonth expirationMonth = yearMonth(2010, march);
-}
+shared class Product(
+    shared String productId = "",
+    shared ProductType productType = ProductType.unknown,
+    shared String description = "",
+    shared String imageUrl = "",
+    shared BigDecimal price = BigDecimal.zero,
+    shared Date expirationDate = today(),
+    shared Time expirationTime = time(12, 34, 56),
+    shared YearMonth expirationMonth = yearMonth(2010, march))
+        extends Entity() {}

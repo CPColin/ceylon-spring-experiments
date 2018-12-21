@@ -7,10 +7,10 @@ import org.springframework.security.core {
 }
 
 entity
-shared class Authority() extends Entity() satisfies GrantedAuthority {
-    shared variable String name = "";
-    
-    shared actual String authority => name;
+shared class Authority(
+    shared String name = "")
+        extends Entity() satisfies GrantedAuthority {
+    authority => name;
     
     string => authority;
 }

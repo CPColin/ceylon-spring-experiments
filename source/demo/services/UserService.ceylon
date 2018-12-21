@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails {
 }
 
 shared interface UserService satisfies CrudService<User> & UserDetailsService {
-    shared formal User? findByUsername(String username);
+    shared formal String encryptPassword(String plainTextPassword);
     
-    shared formal void setPassword(User user, String plainTextPassword);
+    shared formal User? findByUsername(String username);
 }

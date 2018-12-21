@@ -40,6 +40,9 @@ shared class UserServiceImpl() extends CrudServiceImpl<User>() satisfies UserSer
     autowired
     shared late PasswordEncoder passwordEncoder;
     
+    shared actual String encryptPassword(String plainTextPassword)
+            => passwordEncoder.encode(plainTextPassword);
+    
     shared actual User? findByUsername(String username) => repository.findByUsername(username);
     
     throws (`class UsernameNotFoundException`, "when no user matches the given name")
@@ -62,7 +65,4 @@ shared class UserServiceImpl() extends CrudServiceImpl<User>() satisfies UserSer
         
         throw UsernameNotFoundException("User not found: ``username``");
     }
-    
-    shared actual void setPassword(User user, String plainTextPassword)
-            => user.password = passwordEncoder.encode(plainTextPassword);
 }

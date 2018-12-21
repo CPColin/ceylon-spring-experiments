@@ -57,42 +57,38 @@ shared class ProductRepositoryTests() {
     autowired late ProductRepository productRepository;
     
     "A single entity that can be used for testing single-value operations."
-    value product {
-        value product = Product();
-        
-        product.description = "Ceylon Bumper Sticker";
-        product.imageUrl = "";
-        product.price = BigDecimal.zero;
-        product.productId = "1234";
-        product.productType = ProductType.mug;
-
-        return product;
-    }
+    value product => Product {
+        description = "Ceylon Bumper Sticker";
+        imageUrl = "";
+        price = BigDecimal.zero;
+        productId = "1234";
+        productType = ProductType.mug;
+    };
     
     value targetWord = "Good";
     value nonTargetWord = "Bad";
     
     "A trio of entities that can be used for testing multi-value operations."
     value products {
-        value product1 = Product();
+        value product1 = Product {
+            description = "A ``targetWord`` Product";
+        };
         
-        product1.description = "A ``targetWord`` Product";
+        value product2 = Product {
+            description = "Another ``targetWord`` Product";
+        };
         
-        value product2 = Product();
-        
-        product2.description = "Another ``targetWord`` Product";
-        
-        value product3 = Product();
-        
-        product3.description = "A ``nonTargetWord`` Product";
+        value product3 = Product {
+            description = "A ``nonTargetWord`` Product";
+        };
         
         return {product1, product2, product3};
     }
     
     function example(String word) {
-        value exampleProduct = Product();
-        
-        exampleProduct.description = word;
+        value exampleProduct = Product {
+            description = word;
+        };
         
         value exampleMatcher = ExampleMatcher.matching().withStringMatcher(StringMatcher.containing);
         

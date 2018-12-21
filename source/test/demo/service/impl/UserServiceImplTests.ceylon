@@ -24,9 +24,9 @@ shared class UserServiceImplTests() {
     
     test
     shared void testIdIsPopulatedAfterSave() {
-        variable value user = User();
-        
-        user.username = "test";
+        variable value user = User {
+            username = "test";
+        };
         
         assertFalse(user.id exists);
         user = userServiceImpl.save(user);
