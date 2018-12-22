@@ -8,11 +8,18 @@ and `user5` to get normal privileges.
 
 ## Fun stuff
 
-   - Look how clean `demo.domain::Product` is! Since Ceylon takes care of the getters and setters
-     for us, we can just annotate our attributes `variable` and we're good to go.
+   - Look how clean `demo.domain::Product` is! Since Ceylon takes care of the getters for us, we
+     can use direct field access when loading objects from the database and we're good to go.
    - By annotating `demo.services.impl::CrudServiceImpl.repository` with `formal`, we enforce the
      contract that each class in `demo.services.impl` must specify which repository interface it's
      going to use while also being able to provide default implementations of some common tasks.
+
+## Less fun stuff
+
+   - There's a definite tradeoff between having 100% immutable entity classes and making it easy
+     to, well, mutate instances of them. We either have to write what amounts to a copy constructor
+     for each entity class or bite the bullet and add `variable` annotations and give up
+     immutability.
 
 ## Important configuration options
 
