@@ -1,5 +1,6 @@
 import ceylon.test {
     assertEquals,
+    ignore,
     parameters,
     test
 }
@@ -58,6 +59,7 @@ shared void testConvertDateTime(Integer year, Month ceylonMonth, Integer javaMon
 };
 
 test
+ignore("See https://github.com/eclipse/ceylon-sdk/issues/705")
 parameters(`value testParseAndPrintDateTimeParameters`)
 shared void testParseAndPrintDateTime(String parseValue, DateTime ceylonValue, String printValue) {
     value converter = DateTimeConverter();
