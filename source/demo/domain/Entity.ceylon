@@ -4,6 +4,7 @@ import ceylon.time {
 }
 
 import javax.persistence {
+    column,
     generatedValue,
     id,
     mappedSuperclass,
@@ -21,9 +22,10 @@ shared abstract class Entity() {
     version
     shared late Integer? version;
     
-    shared variable Instant? dateCreated = null;
+    column { updatable = false; }
+    shared late Instant? dateCreated;
     
-    shared variable Instant? lastUpdated = null;
+    shared late Instant? lastUpdated;
     
     "Indicates `true` if this entity has ever been saved to the database; that is, when its ID is not null or zero."
     shared Boolean saved => if (exists id) then id != 0 else false;
@@ -35,7 +37,7 @@ shared abstract class Entity() {
         
         lastUpdated = instant;
         
-        if (!dateCreated exists) {
+        if (!saved && !dateCreated exists) {
             dateCreated = instant;
         }
     }

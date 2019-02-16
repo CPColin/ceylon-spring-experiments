@@ -6,12 +6,16 @@ import ceylon.test {
     assertAll,
     assertEquals,
     assertFalse,
+    assertNotEquals,
     assertThatException,
     assertTrue,
     assumeFalse,
     assumeTrue,
     beforeTest,
     test
+}
+import ceylon.time {
+    Instant
 }
 
 import demo.domain {
@@ -479,6 +483,8 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testSaveAndFlushPopulatesId() {
+        value product = this.product;
+        
         assumeFalse(product.id exists, "Product ID should start off null.");
         
         value savedProduct = productRepository.saveAndFlush(product);
@@ -488,6 +494,8 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testSaveAndFlushPopulatesSaved() {
+        value product = this.product;
+        
         assumeFalse(product.saved, "Product ID should start off null.");
         
         value savedProduct = productRepository.saveAndFlush(product);
@@ -496,7 +504,49 @@ shared class ProductRepositoryTests() {
     }
     
     test
+    shared void testSaveDoesNotUpdateDateCreated() {
+        value product = this.product;
+        value instant = Instant(1000);
+        
+        product.dateCreated = instant;
+        
+        value savedProduct = productRepository.save(product);
+        
+        assertEquals(savedProduct.dateCreated, instant,
+            "Product.dateCreated should not have changed.");
+    }
+    
+    test
+    shared void testSaveFetchSaveDoesNotUpdateDateCreated() {
+        value product = this.product;
+        value dateCreated = Instant(1234);
+        
+        product.dateCreated = dateCreated;
+        
+        value savedProduct = productRepository.saveAndFlush(product);
+        value id = savedProduct.id;
+        
+        assert (exists id);
+        
+        value fetchedProduct = productRepository.findById(id).get();
+        
+        assertEquals(fetchedProduct.dateCreated, dateCreated,
+            "Product.dateCreated should not have changed.");
+        
+        productRepository.saveAndFlush(fetchedProduct);
+        
+        value refetchedProduct = productRepository.findById(id).get();
+        
+        assertEquals(refetchedProduct.dateCreated, dateCreated,
+            "Product.dateCreated should not have changed.");
+    }
+    
+
+    
+    test
     shared void testSavePopulatesId() {
+        value product = this.product;
+        
         assumeFalse(product.id exists, "Product ID should start off null.");
         
         value savedProduct = productRepository.save(product);
@@ -506,11 +556,26 @@ shared class ProductRepositoryTests() {
     
     test
     shared void testSavePopulatesSaved() {
+        value product = this.product;
+        
         assumeFalse(product.saved, "Product.saved should start off false.");
         
         value savedProduct = productRepository.save(product);
         
         assertTrue(savedProduct.saved, "Product.saved should no longer be false.");
+    }
+    
+    test
+    shared void testSaveUpdatesLastUpdated() {
+        value product = this.product;
+        value instant = Instant(3000);
+        
+        product.lastUpdated = instant;
+        
+        value savedProduct = productRepository.save(product);
+        
+        assertNotEquals(savedProduct.lastUpdated, instant,
+            "Product.lastUpdated should have changed.");
     }
     
     void assertProductsEqual(Product actual, Product expected, String? message = null) {
