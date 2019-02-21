@@ -1,7 +1,3 @@
-import ceylon.interop.java {
-    JavaList
-}
-
 import demo.domain {
     Authority,
     Role,
@@ -64,7 +60,7 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
     Role createRole(String name, Authority* authorities) {
         value role = Role {
             name = name;
-            authorities = JavaList(authorities);
+            authorities = set(authorities);
         };
         
         roleService.save(role);
@@ -80,7 +76,7 @@ class UserAndRoleLoader() satisfies ApplicationListener<ContextRefreshedEvent> {
             value user = User {
                 username = username;
                 password = userService.encryptPassword(username);
-                roles = JavaList(roles);
+                roles = set(roles);
             };
             
             userService.save(user);

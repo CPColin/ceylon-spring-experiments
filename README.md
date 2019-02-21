@@ -13,6 +13,9 @@ and `user5` to get normal privileges.
    - By annotating `demo.services.impl::CrudServiceImpl.repository` with `formal`, we enforce the
      contract that each class in `demo.services.impl` must specify which repository interface it's
      going to use while also being able to provide default implementations of some common tasks.
+   - The compiler's "EE Mode" lets us jump through fewer hoops: we don't have to annotate all our
+     fields with `default`, we can use Ceylon `List`s, `Map`s, and `Set`s, in many-to-many fields,
+     etc.
 
 ## Less fun stuff
 
@@ -20,13 +23,12 @@ and `user5` to get normal privileges.
      to, well, mutate instances of them. We either have to write what amounts to a copy constructor
      for each entity class or bite the bullet and add `variable` annotations and give up
      immutability.
+   - "EE Mode" only works with `List`, `Map`, and `Set`, not `{T*}`, `MutableSet<T>`, etc.
 
 ## Important configuration options
 
 See `.ceylon/config` for important configuration options, notably:
 
-   - We might not _have_ to use the compiler's "EE Mode," but it's nice not having to annotate all
-     our methods `default` just to keep the `final` modifier out of the generated classes.
    - Automatically and fully exporting Maven dependencies makes sure that the dependencies brought
      in by the Spring Starter modules make it onto the classpath.
    - Using a flat classpath lets Spring do its stuff without Ceylon's usual module management

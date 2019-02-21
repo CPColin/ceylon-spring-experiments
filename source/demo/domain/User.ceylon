@@ -1,11 +1,9 @@
 import ceylon.interop.java {
-    CeylonIterable,
-    JavaList
+    JavaSet
 }
 
 import java.util {
-    Collections,
-    JList=List
+    JSet=Set
 }
 
 import javax.persistence {
@@ -30,20 +28,20 @@ shared class User(
     shared actual String password = "",
     shared actual Boolean enabled = true,
     manyToMany { fetch = FetchType.eager; }
-    shared JList<Role> roles = Collections.emptyList<Role>())
+    shared Set<Role> roles = emptySet)
         extends Entity() satisfies UserDetails {
     transient
-    variable JList<GrantedAuthority>? _authorities = null;
+    variable JSet<GrantedAuthority>? _authorities = null;
     
-    shared actual JList<GrantedAuthority> authorities
-            => _authorities else (_authorities = JavaList<GrantedAuthority>(concatenate(
-                    CeylonIterable(roles),
+    shared actual JSet<GrantedAuthority> authorities
+            => _authorities else (_authorities = JavaSet<GrantedAuthority>(set(concatenate(
+                    roles,
                     {
                         for (role in roles)
                             for (authority in role.authorities)
                                 authority
                     }
-                )));
+                ))));
     
     transient
     shared actual Boolean accountNonExpired = true;

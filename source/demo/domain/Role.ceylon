@@ -1,8 +1,3 @@
-import java.util {
-    Collections,
-    JList=List
-}
-
 import javax.persistence {
     FetchType,
     entity,
@@ -17,7 +12,7 @@ entity
 shared class Role(
     shared String name = "",
     manyToMany { fetch = FetchType.eager; }
-    shared variable JList<Authority> authorities = Collections.emptyList<Authority>())
+    shared variable Set<Authority> authorities = emptySet)
         extends Entity() satisfies GrantedAuthority {
     shared actual String authority => "ROLE_``name``";
     
